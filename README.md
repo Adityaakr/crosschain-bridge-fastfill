@@ -2,26 +2,13 @@
 
 A production-ready USDC bridge with instant liquidity using STXN protocol integration.
 
-## 🚀 **Features**
+## **Features**
 
 - **Gasless Deposits**: Users deposit on Base without requiring on-chain signatures at deposit time
 - **Instant Fast-Fill**: Receive USDC on Arbitrum within ~1-2 blocks using solver inventory
 - **MEV Protection**: STXN post-approve guard guarantees ≥98% of deposit amount (max 2% fee)
 - **Real STXN Integration**: Uses actual STXN CallBreaker contracts, not mocks
 - **Production Security**: Comprehensive safety checks and validations
-
-## 📋 **Deployment Status**
-
-**✅ FULLY DEPLOYED ON TESTNETS:**
-
-**Base Sepolia:**
-- BaseDepositEscrow: `0x0737c4a886b8898718881fd4e2fe9141abec1244`
-- USDC: `0x036CbD53842c5426634e7929541eC2318f3dCF7e`
-
-**Arbitrum Sepolia:**
-- Real STXN CallBreaker: `0x7f71a9c6b157aa17501cb30b36c3d1affe7059cc`
-- ArbPostApprove: `0x0737c4a886b8898718881fd4e2fe9141abec1244`
-- USDC: `0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d`
 
 ## 🏗️ **Architecture**
 
@@ -127,12 +114,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🏆 **Achievements**
 
-- ✅ **Real STXN Integration**: Working with actual CallBreaker contracts
+- ✅ **STXN Integration**: Working with actual CallBreaker contracts
 - ✅ **Production Deployments**: Live on Base and Arbitrum testnets
 - ✅ **Comprehensive Tooling**: 40+ scripts for development and testing
 - ✅ **Security Focused**: MEV protection and safety validations
 - ✅ **Professional Architecture**: Clean, maintainable codebase
 
 ---
-
-**Built with ❤️ for the cross-chain future**
