@@ -1,0 +1,17 @@
+{
+  "name": "crosschain-bridge-fastfill",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "push:arb": "ts-node --esm scripts/pushArbFastFill.ts",
+    "deploy:base": "ts-node --esm scripts/deployBase.ts",
+    "deploy:arb": "ts-node --esm scripts/deployArb.ts"
+  },
+  "dependencies": {
+    "viem": "^2.22.5",
+    "dotenv": "^16.4.5",
+    "typescript": "^5.6.3",
+    "ts-node": "^10.9.2"
+  }
+}
