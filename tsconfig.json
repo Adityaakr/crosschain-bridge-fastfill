@@ -11,7 +11,7 @@
     "outDir": "dist"
   },
   "include": [
-    "scripts/**/*.ts"
+    "web-app/scripts/**/*.ts"
   ],
   "ts-node": {
     "esm": true
