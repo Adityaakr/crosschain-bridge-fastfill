@@ -1,0 +1,39 @@
+{
+  "solver": {
+    "minProfitBasisPoints": 20,
+    "maxSlippageBasisPoints": 50,
+    "inventoryThreshold": "1000",
+    "gasLimitMultiplier": 1.2,
+    "maxSingleDeposit": "10000",
+    "minSingleDeposit": "1"
+  },
+  "monitoring": {
+    "pollIntervalMs": 5000,
+    "retryAttempts": 3,
+    "timeoutMs": 30000
+  },
+  "chains": {
+    "base": {
+      "chainId": 84532,
+      "name": "Base Sepolia",
+      "blockConfirmations": 1
+    },
+    "arbitrum": {
+      "chainId": 421614,
+      "name": "Arbitrum Sepolia", 
+      "blockConfirmations": 1
+    }
+  },
+  "contracts": {
+    "baseDepositEscrow": "0x0737c4a886b8898718881fd4e2fe9141abec1244",
+    "arbPostApprove": "0x0737c4a886b8898718881fd4e2fe9141abec1244",
+    "callBreakerArb": "0x7f71a9c6b157aa17501cb30b36c3d1affe7059cc",
+    "usdcBase": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+    "usdcArb": "0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d"
+  },
+  "stxn": {
+    "appId": "app.cross.fastfill.v1",
+    "maxFeePerGas": "1000000000",
+    "maxPriorityFeePerGas": "1000000000"
+  }
+}

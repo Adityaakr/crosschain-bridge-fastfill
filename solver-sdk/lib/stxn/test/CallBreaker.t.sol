@@ -1,0 +1,698 @@
+// SPDX-License-Identifier: BSL-1.
+pragma solidity 0.8.30;
+
+import "forge-std/Test.sol";
+import {CallObject, UserObjective, AdditionalData, CallBreaker} from "src/CallBreaker.sol";
+import {Counter} from "src/tests/Counter.sol";
+import {PreApprover} from "src/tests/PreApprover.sol";
+import {CallBreakerTestHelper} from "./utils/CallBreakerTestHelper.sol";
+import {SignatureHelper} from "test/utils/SignatureHelper.sol";
+
+contract CallBreakerTest is Test {
+    PreApprover public preApprover;
+    CallBreaker public callBreaker;
+    SignatureHelper public signatureHelper;
+    Counter public counter;
+
+    address public user = vm.addr(0x1);
+    address public user2 = vm.addr(0x2);
+    address public user3 = vm.addr(0x3);
+    address public solver = address(0x4);
+    address public owner = address(0x5);
+
+    uint256[] public userPrivateKeys = [0x1, 0x2, 0x3];
+    address[] public users = [user, user2, user3];
+
+    function setUp() public {
+        callBreaker = new CallBreaker(owner);
+        signatureHelper = new SignatureHelper(callBreaker);
+
+        // deploy test contracts
+        counter = new Counter();
+        preApprover = new PreApprover();
+
+        // Give user some ETH
+        vm.deal(user, 10 ether);
+        vm.deal(user2, 10 ether);
+        vm.deal(user3, 10 ether);
+        // Give solver some ETH
+        vm.deal(solver, 100 ether);
+
+        vm.prank(user);
+        callBreaker.deposit{value: 5 ether}(); // Add some balance to the call breaker
+        vm.prank(user2);
+        callBreaker.deposit{value: 5 ether}(); // Add some balance to the call breaker
+        vm.prank(user3);
+        callBreaker.deposit{value: 5 ether}(); // Add some balance to the call breaker
+    }
+
+    function testEthDeposit() public {
+        uint256 amount = 1 ether;
+
+        bytes memory expectedError = abi.encodeWithSelector(CallBreaker.CallVerificationFailed.selector);
+        vm.prank(users[0]);
+        vm.expectRevert(expectedError);
+
+        (bool success,) = address(callBreaker).call{value: amount}("");
+        assertEq(success, false);
+    }
+
+    function testDeposit() public {
+        uint256 amount = 2 ether;
+        uint256 userBalanceBefore = users[0].balance;
+        uint256 callBreakerBalanceBefore = address(callBreaker).balance;
+
+        vm.prank(users[0]);
+        callBreaker.deposit{value: amount}();
+
+        uint256 userBalanceAfter = users[0].balance;
+        uint256 callBreakerBalanceAfter = address(callBreaker).balance;
+
+        assertEq(callBreaker.senderBalances(users[0]), userBalanceBefore + amount);
+        assertEq(userBalanceBefore - userBalanceAfter, amount);
+        assertEq(callBreakerBalanceAfter - callBreakerBalanceBefore, amount);
+    }
+
+    function testDepositFail() public {
+        uint256 amount = 0;
+        bytes memory expectedError = abi.encodeWithSelector(CallBreaker.InvalidAmount.selector);
+
+        vm.prank(user);
+        vm.expectRevert(expectedError);
+        callBreaker.deposit{value: amount}();
+    }
+
+    function testExecuteAndVerifyWithUserReturns() public {
+        (UserObjective[] memory userObjs, bytes[] memory returnValues) = _prepareInputsForCounter(3, true); // returns 3 values for each array
+
+        uint256[] memory orderOfExecution = new uint256[](3);
+        orderOfExecution[0] = 2;
+        orderOfExecution[1] = 1;
+        orderOfExecution[2] = 0;
+
+        vm.prank(solver);
+        callBreaker.executeAndVerify(userObjs, returnValues, orderOfExecution, CallBreakerTestHelper.emptyMevTimeData());
+    }
+
+    function testExecuteAndVerifyWithSolverReturns() public {
+        (UserObjective[] memory userObjs, bytes[] memory returnValues) = _prepareInputsForCounter(3, false); // returns 3 values for each array
+
+        uint256[] memory orderOfExecution = new uint256[](3);
+        orderOfExecution[0] = 2;
+        orderOfExecution[1] = 0;
+        orderOfExecution[2] = 1;
+
+        vm.prank(solver);
+        callBreaker.executeAndVerify(userObjs, returnValues, orderOfExecution, CallBreakerTestHelper.emptyMevTimeData());
+    }
+
+    function testExecuteAndVerifyWithInsufficientUserBalance() public {
+        (UserObjective[] memory userObjs, bytes[] memory returnValues) =
+            _prepareInputsForCounterWithUnsufficientUserBalance(3, true); // returns 3 values for each array
+
+        uint256[] memory orderOfExecution = new uint256[](3);
+        orderOfExecution[0] = 2;
+        orderOfExecution[1] = 1;
+        orderOfExecution[2] = 0;
+
+        bytes memory expectedError = abi.encodeWithSelector(CallBreaker.OutOfEther.selector);
+
+        vm.prank(solver);
+        vm.expectRevert(expectedError);
+
+        callBreaker.executeAndVerify(userObjs, returnValues, orderOfExecution, CallBreakerTestHelper.emptyMevTimeData());
+    }
+
+    function testExecuteAndVerifyWithInvalidUserReturnValues() public {
+        (UserObjective[] memory userObjs, bytes[] memory returnValues) =
+            _prepareInputsForCounterWithInvalidUserReturnValues(3, true); // returns 3 values for each array
+
+        uint256[] memory orderOfExecution = new uint256[](3);
+        orderOfExecution[0] = 0;
+        orderOfExecution[1] = 1;
+        orderOfExecution[2] = 2;
+
+        bytes memory expectedError = abi.encodeWithSelector(CallBreaker.CallVerificationFailed.selector);
+
+        vm.prank(solver);
+        vm.expectRevert(expectedError);
+        callBreaker.executeAndVerify(userObjs, returnValues, orderOfExecution, CallBreakerTestHelper.emptyMevTimeData());
+    }
+
+    function testExecuteWithInvalidSignatureLength() public {
+        (UserObjective[] memory userObjs, bytes[] memory returnValues) =
+            _prepareInputsForCounterWithInvalidSignatureLength(3, false); // Generates incorrect signatures
+
+        uint256[] memory orderOfExecution = new uint256[](3);
+        orderOfExecution[0] = 2;
+        orderOfExecution[1] = 0;
+        orderOfExecution[2] = 1;
+
+        vm.prank(solver);
+        vm.expectRevert("Invalid signature length"); // Expect failure due to bad signature format
+        callBreaker.executeAndVerify(userObjs, returnValues, orderOfExecution, CallBreakerTestHelper.emptyMevTimeData());
+    }
+
+    function testExecuteWithInvalidSignatureSigner() public {
+        (UserObjective[] memory userObjs, bytes[] memory returnValues) =
+            _prepareInputsForCounterWithInvalidSignatureSigner(3, false); // Generates incorrect signatures
+
+        uint256[] memory orderOfExecution = new uint256[](3);
+        orderOfExecution[0] = 0;
+        orderOfExecution[1] = 1;
+        orderOfExecution[2] = 2;
+
+        bytes memory expectedError = abi.encodeWithSelector(
+            CallBreaker.UnauthorisedSigner.selector,
+            user3, // Recovered address from invalidSignature
+            user // Expected sender (userObj.sender)
+        );
+
+        vm.prank(solver);
+        vm.expectRevert(expectedError); // Expect failure due to bad signature format
+        callBreaker.executeAndVerify(userObjs, returnValues, orderOfExecution, CallBreakerTestHelper.emptyMevTimeData());
+    }
+
+    function testExecuteWithInvalidReturnValuesLength() public {
+        (UserObjective[] memory userObjs, bytes[] memory returnValues) =
+            _prepareInputsForCounterWithInvalidReturnValuesLength(3, false); // Generates incorrect signatures
+
+        uint256[] memory orderOfExecution = new uint256[](3);
+        orderOfExecution[0] = 2;
+        orderOfExecution[1] = 0;
+        orderOfExecution[2] = 1;
+
+        bytes memory expectedError = abi.encodeWithSelector(CallBreaker.LengthMismatch.selector);
+
+        vm.prank(solver);
+        vm.expectRevert(expectedError); // Expect failure due to bad signature format
+        callBreaker.executeAndVerify(userObjs, returnValues, orderOfExecution, CallBreakerTestHelper.emptyMevTimeData());
+    }
+
+    function testExecuteWithInvalidContractCall() public {
+        (UserObjective[] memory userObjs, bytes[] memory returnValues) =
+            _prepareInputsForCounterWithInvalidContractCall(3, false);
+
+        uint256[] memory orderOfExecution = new uint256[](3);
+        orderOfExecution[0] = 2;
+        orderOfExecution[1] = 0;
+        orderOfExecution[2] = 1;
+
+        bytes memory expectedError = abi.encodeWithSelector(CallBreaker.CallFailed.selector);
+        vm.prank(solver);
+        vm.expectRevert(expectedError); // Expect failure due to bad signature format
+        callBreaker.executeAndVerify(userObjs, returnValues, orderOfExecution, CallBreakerTestHelper.emptyMevTimeData());
+    }
+
+    function testExecuteWithInvalidOrderOfExecution() public {
+        (UserObjective[] memory userObjs, bytes[] memory returnValues) = _prepareInputsForCounter(3, false);
+
+        uint256[] memory orderOfExecution = new uint256[](3);
+        orderOfExecution[0] = 5;
+        orderOfExecution[1] = 0;
+        orderOfExecution[2] = 1;
+
+        bytes memory expectedError = abi.encodeWithSelector(CallBreaker.FlatIndexOutOfBounds.selector);
+
+        vm.prank(solver);
+        vm.expectRevert(expectedError); // Expect failure due to bad signature format
+        callBreaker.executeAndVerify(userObjs, returnValues, orderOfExecution, CallBreakerTestHelper.emptyMevTimeData());
+    }
+
+    function testPushUserObjectiveWithoutPreApproval() public {
+        (UserObjective memory userObjective, AdditionalData[] memory additionalData) =
+            _prepareInputsForSignalUserObjective();
+
+        uint256 sequenceCounter = callBreaker.sequenceCounter();
+
+        vm.prank(user);
+        vm.expectEmit(false, true, true, true);
+        emit CallBreaker.UserObjectivePushed(
+            0, sequenceCounter, userObjective.appId, userObjective.chainId, block.number, userObjective, additionalData
+        );
+        callBreaker.pushUserObjective(userObjective, additionalData);
+    }
+
+    function testSetApprovalAddresses() public {
+        address preApproval = address(preApprover);
+        address postApproval = address(preApprover);
+
+        vm.prank(owner);
+        vm.expectEmit(false, true, true, true);
+        emit CallBreaker.ApprovalAddressesSet(hex"01", preApproval, postApproval);
+        callBreaker.setApprovalAddresses(hex"01", preApproval, postApproval);
+
+        (address retrievedPreApproval, address retrievedPostApproval) = callBreaker.getApprovalAddresses(hex"01");
+        assertEq(retrievedPreApproval, preApproval);
+        assertEq(retrievedPostApproval, postApproval);
+    }
+
+    function testSetApprovalAddressesFail() public {
+        address preApproval = address(preApprover);
+        address postApproval = address(preApprover);
+
+        vm.prank(user);
+        vm.expectRevert();
+        callBreaker.setApprovalAddresses(hex"01", preApproval, postApproval);
+    }
+
+    function testPushUserObjectiveWithPreApproval() public {
+        (UserObjective memory userObjective, AdditionalData[] memory additionalData) =
+            _prepareInputsForSignalUserObjective();
+
+        userObjective.appId = hex"01";
+
+        // Set pre-approval address
+        vm.prank(owner);
+        callBreaker.setApprovalAddresses(userObjective.appId, address(preApprover), address(0));
+
+        uint256 sequenceCounter = callBreaker.sequenceCounter();
+
+        vm.prank(user);
+        vm.expectEmit(false, true, true, true);
+        emit CallBreaker.UserObjectivePushed(
+            0, sequenceCounter, userObjective.appId, userObjective.chainId, block.number, userObjective, additionalData
+        );
+        callBreaker.pushUserObjective{value: 0.1 ether}(userObjective, additionalData);
+
+        assertEq(address(preApprover).balance, 0.1 ether);
+    }
+
+    function testPushUserObjectiveWithPreApprovalFail() public {
+        (UserObjective memory userObjective, AdditionalData[] memory additionalData) =
+            _prepareInputsForSignalUserObjective();
+
+        userObjective.appId = hex"01";
+
+        // Set pre-approval address to a contract that will reject
+        vm.prank(owner);
+        callBreaker.setApprovalAddresses(userObjective.appId, address(preApprover), address(0));
+
+        // Set the PreApprover to reject requests
+        vm.prank(owner);
+        preApprover.setShouldApprove(false);
+
+        vm.prank(user);
+        vm.expectRevert(abi.encodeWithSelector(CallBreaker.PreApprovalFailed.selector, userObjective.appId));
+        callBreaker.pushUserObjective(userObjective, additionalData);
+    }
+
+    function testTransientStorageReturnValues() public {
+        // Create a CallObject that exposes its return value
+        CallObject memory callObj = CallObject({
+            salt: 1,
+            amount: 0,
+            gas: 100000,
+            addr: address(counter),
+            callvalue: abi.encodeWithSignature("incrementCounter()"),
+            returnvalue: "",
+            skippable: false,
+            verifiable: true,
+            exposeReturn: true
+        });
+
+        // Check that no return value exists initially
+        assertEq(callBreaker.hasReturnValue(callObj), false);
+        assertEq(callBreaker.hasZeroLengthReturnValue(callObj), false);
+
+        // Execute the call and verify it stores the return value
+        (bool success,) = callObj.addr.call{gas: callObj.gas, value: callObj.amount}(callObj.callvalue);
+        assertTrue(success);
+
+        // Since we're not in the context of executeAndVerify, we need to manually test the storage
+        // This test verifies the storage mechanism works correctly
+        bytes32 key = keccak256(abi.encode(callObj));
+        uint256 lengthSlot = uint256(
+            keccak256(
+                abi.encodePacked(
+                    "\x19\x01", bytes32(uint256(keccak256("CallBreaker.CALL_RETURN_LENGTHS_SLOT")) - 1), key, uint256(0)
+                )
+            )
+        );
+
+        // The length should be 0 since we haven't stored anything yet
+        uint256 length;
+        assembly ("memory-safe") {
+            length := tload(lengthSlot)
+        }
+        assertEq(length, 0);
+    }
+
+    function testStorageStateBeforeAndAfterExecuteAndVerify() public {
+        (UserObjective[] memory userObjs, bytes[] memory returnValues) = _prepareInputsForCounter(3, false);
+
+        uint256[] memory orderOfExecution = new uint256[](3);
+        orderOfExecution[0] = 2;
+        orderOfExecution[1] = 0;
+        orderOfExecution[2] = 1;
+        (
+            bytes memory beforeOrderOfExecutionStatus,
+            uint256 beforeCallGridLengthStatus,
+            bool beforeCallGridHasValuesStatus,
+            bool beforeMevTimeDataKeyListHasValuesStatus
+        ) = _getValuesOfStorageVariables(userObjs);
+        vm.prank(solver);
+        callBreaker.executeAndVerify(userObjs, returnValues, orderOfExecution, CallBreakerTestHelper.emptyMevTimeData());
+        (
+            bytes memory afterOrderOfExecutionStatus,
+            uint256 afterCallGridLengthStatus,
+            bool afterCallGridHasValuesStatus,
+            bool afterMevTimeDataKeyListHasValuesStatus
+        ) = _getValuesOfStorageVariables(userObjs);
+
+        assertEq(beforeOrderOfExecutionStatus, afterOrderOfExecutionStatus, "Order of execution status is not the same");
+        assertEq(beforeCallGridLengthStatus, afterCallGridLengthStatus, "Call grid length status is not the same");
+        assertEq(
+            beforeCallGridHasValuesStatus, afterCallGridHasValuesStatus, "Call grid has values status is not the same"
+        );
+        assertEq(
+            beforeMevTimeDataKeyListHasValuesStatus,
+            afterMevTimeDataKeyListHasValuesStatus,
+            "Mev time data key list has values status is not the same"
+        );
+    }
+
+    function _getValuesOfStorageVariables(UserObjective[] memory userObjs)
+        internal
+        returns (
+            bytes memory orderOfExecutionStatus,
+            uint256 callGridLengthStatus,
+            bool callGridHasValuesStatus,
+            bool mevTimeDataKeyListHasValuesStatus
+        )
+    {
+        // check transient storage for order of execution
+        uint256 callOrderSlot = uint256(bytes32(uint256(keccak256("CallBreaker.CALL_ORDER_STORAGE_SLOT")) - 1));
+        assembly ("memory-safe") {
+            orderOfExecutionStatus := tload(callOrderSlot)
+        }
+
+        //check transient storage for call grid length
+        uint256 callGridLengthSlot = uint256(bytes32(uint256(keccak256("CallBreaker.CALL_GRID_LENGTHS_SLOT")) - 1));
+        assembly ("memory-safe") {
+            callGridLengthStatus := tload(callGridLengthSlot)
+        }
+
+        //check callGrid - check if it has any values in the grid
+        bool callGridHasValues = false;
+        try callBreaker.callGrid(0, 0) {
+            callGridHasValues = true; // At least one element exists
+        } catch {
+            callGridHasValues = false; // Grid is empty
+        }
+
+        //check mevTimeDataKeyList - check if it has any values in the key list
+        bool mevTimeDataKeyListHasValues = false;
+        try callBreaker.mevTimeDataKeyList(0) {
+            mevTimeDataKeyListHasValues = true; // At least one element exists
+        } catch {
+            mevTimeDataKeyListHasValues = false; // Grid is empty
+        }
+
+        // check callObjIndices - check if it has any values in the call obj indices
+        vm.expectRevert();
+        callBreaker.getCallIndex(userObjs[0].callObjects[0]);
+
+        return (orderOfExecutionStatus, callGridLengthStatus, callGridHasValues, mevTimeDataKeyListHasValues);
+    }
+
+    function _prepareInputsForCounter(uint256 numValues, bool userReturn)
+        internal
+        view
+        returns (UserObjective[] memory userObjs, bytes[] memory returnValues)
+    {
+        userObjs = new UserObjective[](numValues);
+        returnValues = new bytes[](numValues);
+
+        for (uint256 i; i < numValues; i++) {
+            CallObject[] memory callObjs = new CallObject[](1);
+
+            if (userReturn) {
+                bytes memory expectedReturnValue = abi.encode((3 - i)); // Inverted execution order
+                callObjs[0] = _buildCallObject(address(counter), "incrementCounter()", expectedReturnValue);
+                returnValues[i] = abi.encode(numValues + 1); // Incorrect return value
+            } else {
+                callObjs[0] = _buildCallObject(address(counter), "incrementCounter()", "");
+                returnValues[i] = abi.encode(i + 1);
+            }
+
+            bytes memory signature = signatureHelper.generateSignature(0, users[i], userPrivateKeys[i], callObjs);
+            userObjs[i] = CallBreakerTestHelper.buildUserObjective(0, users[i], signature, callObjs);
+        }
+
+        return (userObjs, returnValues);
+    }
+
+    function _prepareInputsForSignalUserObjective()
+        internal
+        view
+        returns (UserObjective memory, AdditionalData[] memory)
+    {
+        CallObject[] memory callObjs = new CallObject[](1);
+        bytes memory expectedReturnValue = abi.encode("");
+        callObjs[0] = _buildCallObject(address(0), "claim()", expectedReturnValue);
+
+        bytes memory signature = signatureHelper.generateSignature(0, users[0], userPrivateKeys[0], callObjs);
+        UserObjective memory userObjective =
+            CallBreakerTestHelper.buildCrossChainUserObjective(101, 0, users[0], signature, callObjs); // Solana chain ID: 101
+
+        AdditionalData[] memory additionalData = new AdditionalData[](3);
+        additionalData[0] = AdditionalData({key: keccak256(abi.encode("amount")), value: abi.encode(10e18)});
+        additionalData[1] = AdditionalData({
+            key: keccak256(abi.encode("SolanaContractAddress")),
+            value: abi.encode(keccak256(abi.encode("0x1")))
+        });
+        additionalData[2] = AdditionalData({
+            key: keccak256(abi.encode("SolanaWalletAddress")),
+            value: abi.encode(keccak256(abi.encode("0x2")))
+        });
+
+        return (userObjective, additionalData);
+    }
+
+    // Generates incorrect signatures (e.g., incorrect length)
+    function _prepareInputsForCounterWithInvalidSignatureLength(uint256 numValues, bool userReturn)
+        internal
+        view
+        returns (UserObjective[] memory userObjs, bytes[] memory returnValues)
+    {
+        userObjs = new UserObjective[](numValues);
+        returnValues = new bytes[](numValues);
+
+        for (uint256 i; i < numValues; i++) {
+            CallObject[] memory callObjs = new CallObject[](1);
+
+            if (userReturn) {
+                bytes memory expectedReturnValue = abi.encode((3 - i));
+                callObjs[0] = _buildCallObject(address(counter), "incrementCounter()", expectedReturnValue);
+                returnValues[i] = abi.encode(numValues + 1);
+            } else {
+                callObjs[0] = _buildCallObject(address(counter), "incrementCounter()", "");
+                returnValues[i] = abi.encode(i + 1);
+            }
+
+            bytes memory signature = signatureHelper.generateInvalidSignatureUsingLength(); // Generates bad signatures
+            userObjs[i] = CallBreakerTestHelper.buildUserObjective(0, users[i], signature, callObjs);
+        }
+
+        return (userObjs, returnValues);
+    }
+
+    function _prepareInputsForCounterWithInvalidSignatureSigner(uint256 numValues, bool userReturn)
+        internal
+        view
+        returns (UserObjective[] memory userObjs, bytes[] memory returnValues)
+    {
+        userObjs = new UserObjective[](numValues);
+        returnValues = new bytes[](numValues);
+
+        for (uint256 i = 1; i < numValues; i++) {
+            CallObject[] memory callObjs = new CallObject[](1);
+
+            if (userReturn) {
+                bytes memory expectedReturnValue = abi.encode((3 - i));
+                callObjs[0] = _buildCallObject(address(counter), "incrementCounter()", expectedReturnValue);
+                returnValues[i] = abi.encode(numValues + 1);
+            } else {
+                callObjs[0] = _buildCallObject(address(counter), "incrementCounter()", "");
+                returnValues[i] = abi.encode(i + 1);
+            }
+
+            bytes memory signature = signatureHelper.generateSignature(0, users[i], userPrivateKeys[i], callObjs);
+            userObjs[i] = CallBreakerTestHelper.buildUserObjective(0, users[i], signature, callObjs);
+        }
+
+        CallObject[] memory callObj = new CallObject[](1);
+        if (userReturn) {
+            bytes memory expectedReturnValue = abi.encode((3));
+            callObj[0] = _buildCallObject(address(counter), "incrementCounter()", expectedReturnValue);
+            returnValues[0] = abi.encode(numValues + 1);
+        } else {
+            callObj[0] = _buildCallObject(address(counter), "incrementCounter()", "");
+            returnValues[0] = abi.encode(1);
+        }
+        // generating signature with a different Private Key
+        bytes memory invalidSignature = signatureHelper.generateSignature(0, users[0], userPrivateKeys[2], callObj); // Generates bad signatures
+        userObjs[0] = CallBreakerTestHelper.buildUserObjective(0, users[0], invalidSignature, callObj);
+        return (userObjs, returnValues);
+    }
+
+    function _prepareInputsForCounterWithInvalidOrderOfExecution(uint256 numValues, bool userReturn)
+        internal
+        view
+        returns (UserObjective[] memory userObjs, bytes[] memory returnValues)
+    {
+        userObjs = new UserObjective[](numValues);
+        returnValues = new bytes[](numValues);
+
+        for (uint256 i; i < numValues; i++) {
+            CallObject[] memory callObjs = new CallObject[](1);
+
+            if (userReturn) {
+                bytes memory expectedReturnValue = abi.encode((3 - i));
+                callObjs[0] = _buildCallObject(address(counter), "incrementCounter()", expectedReturnValue);
+                returnValues[i] = abi.encode(numValues + 1);
+            } else {
+                callObjs[0] = _buildCallObject(address(counter), "incrementCounter()", "");
+                returnValues[i] = abi.encode(i + 1);
+            }
+
+            bytes memory signature = signatureHelper.generateSignature(0, users[i], userPrivateKeys[i], callObjs);
+            userObjs[i] = CallBreakerTestHelper.buildUserObjective(0, users[i], signature, callObjs);
+        }
+
+        return (userObjs, returnValues);
+    }
+
+    function _prepareInputsForCounterWithInvalidReturnValuesLength(uint256 numValues, bool userReturn)
+        internal
+        view
+        returns (UserObjective[] memory userObjs, bytes[] memory returnValues)
+    {
+        userObjs = new UserObjective[](numValues);
+        returnValues = new bytes[](numValues + 1);
+
+        for (uint256 i; i < numValues; i++) {
+            CallObject[] memory callObjs = new CallObject[](1);
+
+            if (userReturn) {
+                bytes memory expectedReturnValue = abi.encode((3 - i));
+                callObjs[0] = _buildCallObject(address(counter), "incrementCounter()", expectedReturnValue);
+                returnValues[i] = abi.encode(numValues + 1);
+            } else {
+                callObjs[0] = _buildCallObject(address(counter), "incrementCounter()", "");
+                returnValues[i] = abi.encode(i + 1);
+            }
+
+            bytes memory signature = signatureHelper.generateSignature(0, users[i], userPrivateKeys[i], callObjs); // Generates bad signatures
+            userObjs[i] = CallBreakerTestHelper.buildUserObjective(0, users[i], signature, callObjs);
+        }
+        returnValues[numValues] = "";
+
+        return (userObjs, returnValues);
+    }
+
+    function _prepareInputsForCounterWithInvalidContractCall(uint256 numValues, bool userReturn)
+        internal
+        view
+        returns (UserObjective[] memory userObjs, bytes[] memory returnValues)
+    {
+        userObjs = new UserObjective[](numValues);
+        returnValues = new bytes[](numValues);
+
+        for (uint256 i; i < numValues; i++) {
+            CallObject[] memory callObjs = new CallObject[](1);
+
+            if (userReturn) {
+                bytes memory expectedReturnValue = abi.encode((3 - i));
+                callObjs[0] = _buildCallObject(
+                    address(counter),
+                    "incrementCounters()", // Provided wrong function name so that the call will fail
+                    expectedReturnValue
+                );
+                returnValues[i] = abi.encode(numValues + 1);
+            } else {
+                callObjs[0] = _buildCallObject(address(counter), "incrementCounters()", "");
+                returnValues[i] = abi.encode(i + 1);
+            }
+
+            bytes memory signature = signatureHelper.generateSignature(0, users[i], userPrivateKeys[i], callObjs); // Generates bad signatures
+            userObjs[i] = CallBreakerTestHelper.buildUserObjective(0, users[i], signature, callObjs);
+        }
+
+        return (userObjs, returnValues);
+    }
+
+    function _prepareInputsForCounterWithInvalidUserReturnValues(uint256 numValues, bool userReturn)
+        internal
+        view
+        returns (UserObjective[] memory userObjs, bytes[] memory returnValues)
+    {
+        userObjs = new UserObjective[](numValues);
+        returnValues = new bytes[](numValues);
+
+        for (uint256 i; i < numValues; i++) {
+            CallObject[] memory callObjs = new CallObject[](1);
+
+            if (userReturn) {
+                bytes memory expectedReturnValue = abi.encode((3 - i)); // Inverted execution order
+                callObjs[0] = _buildCallObject(address(counter), "incrementCounter()", expectedReturnValue);
+                returnValues[i] = abi.encode(numValues + 1); // Incorrect return value
+            } else {
+                callObjs[0] = _buildCallObject(address(counter), "incrementCounter()", "");
+                returnValues[i] = abi.encode(i + 1);
+            }
+
+            bytes memory signature = signatureHelper.generateSignature(0, users[i], userPrivateKeys[i], callObjs);
+            userObjs[i] = CallBreakerTestHelper.buildUserObjective(0, users[i], signature, callObjs);
+        }
+
+        return (userObjs, returnValues);
+    }
+
+    function _prepareInputsForCounterWithUnsufficientUserBalance(uint256 numValues, bool userReturn)
+        internal
+        view
+        returns (UserObjective[] memory userObjs, bytes[] memory returnValues)
+    {
+        userObjs = new UserObjective[](numValues);
+        returnValues = new bytes[](numValues);
+
+        for (uint256 i; i < numValues; i++) {
+            CallObject[] memory callObjs = new CallObject[](1);
+
+            if (userReturn) {
+                bytes memory expectedReturnValue = abi.encode((3 - i)); // Inverted execution order
+                callObjs[0] = _buildCallObject(address(counter), "incrementCounter()", expectedReturnValue);
+                returnValues[i] = abi.encode(numValues + 1); // Incorrect return value
+            } else {
+                callObjs[0] = _buildCallObject(address(counter), "incrementCounter()", "");
+                returnValues[i] = abi.encode(i + 1);
+            }
+
+            bytes memory signature = signatureHelper.generateSignature(0, users[i], userPrivateKeys[i], callObjs);
+            userObjs[i] =
+                CallBreakerTestHelper.buildUserObjectiveWithInsufficientBalance(0, users[i], signature, callObjs);
+        }
+
+        return (userObjs, returnValues);
+    }
+
+    function _buildCallObject(address contractAddr, string memory funcSignature, bytes memory returnValue)
+        internal
+        pure
+        returns (CallObject memory)
+    {
+        return CallObject({
+            salt: 1,
+            amount: 0,
+            gas: 100000,
+            addr: contractAddr,
+            callvalue: abi.encodeWithSignature(funcSignature),
+            returnvalue: returnValue,
+            skippable: false,
+            verifiable: true,
+            exposeReturn: false
+        });
+    }
+}

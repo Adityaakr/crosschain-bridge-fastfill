@@ -1,0 +1,44 @@
+{
+  "name": "@crosschain-bridge/solver-sdk",
+  "version": "1.0.0",
+  "description": "SDK for solvers to participate in the Cross-Chain Bridge Fast-Fill network",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "start:solver": "node src/solver.js",
+    "monitor": "node src/monitor.js",
+    "check-requirements": "node scripts/checkRequirements.js",
+    "simulate": "node scripts/simulateExecution.js",
+    "rebalance": "node scripts/rebalanceInventory.js",
+    "test": "node test/solver.test.js"
+  },
+  "keywords": [
+    "cross-chain",
+    "bridge",
+    "solver",
+    "defi",
+    "stxn",
+    "arbitrum",
+    "base",
+    "usdc"
+  ],
+  "author": "Cross-Chain Bridge Team",
+  "license": "MIT",
+  "dependencies": {
+    "viem": "^2.22.5",
+    "dotenv": "^16.4.5",
+    "ethers": "^6.13.4",
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Adityaakr/crosschain-bridge-fastfill.git",
+    "directory": "solver-sdk"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
