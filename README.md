@@ -1,4 +1,4 @@
-# Cross-Chain Bridge Fast-Fill (Base → Arbitrum)
+# Cross-Chain Bridge Fast-Fill
 
 A production-ready USDC bridge with instant liquidity using STXN protocol integration.
 
