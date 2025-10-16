@@ -8,29 +8,38 @@ interface IERC20 {
 }
 
 interface ISTXNCallBreaker {
+    struct CallObject {
+        uint256 salt;
+        uint256 amount;
+        uint256 gas;
+        address addr;
+        bytes callvalue;
+        bytes returnvalue;
+        bool skippable;
+        bool verifiable;
+        bool exposeReturn;
+    }
+    
+    struct UserObjective {
+        bytes appId;
+        uint256 nonce;
+        uint256 tip;
+        uint256 chainId;
+        uint256 maxFeePerGas;
+        uint256 maxPriorityFeePerGas;
+        address sender;
+        bytes signature;
+        CallObject[] callObjects;
+    }
+    
+    struct AdditionalData {
+        bytes32 key;
+        bytes value;
+    }
+    
     function pushUserObjective(
-        tuple(
-            bytes appId,
-            uint256 nonce,
-            uint256 tip,
-            uint256 chainId,
-            uint256 maxFeePerGas,
-            uint256 maxPriorityFeePerGas,
-            address sender,
-            bytes signature,
-            tuple(
-                uint256 salt,
-                uint256 amount,
-                uint256 gas,
-                address addr,
-                bytes callvalue,
-                bytes returnvalue,
-                bool skippable,
-                bool verifiable,
-                bool exposeReturn
-            )[] callObjects
-        ) userObjective,
-        tuple(bytes32 key, bytes value)[] additionalData
+        UserObjective calldata userObjective,
+        AdditionalData[] calldata additionalData
     ) external payable returns (bytes32 requestId);
 }
 

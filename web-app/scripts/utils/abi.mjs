@@ -51,7 +51,8 @@ export const ismartExecuteAbi = [
             {"name":"skippable","type":"bool"},
             {"name":"verifiable","type":"bool"},
             {"name":"exposeReturn","type":"bool"}
-          ]}
+          ]},
+          {"name":"signature","type":"bytes"}
         ]
       },
       { "name":"_additionalData", "type":"tuple[]", "components":[

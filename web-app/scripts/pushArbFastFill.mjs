@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import { createWalletClient, createPublicClient, http, encodeFunctionData, toBytes, parseAbi, zeroAddress, keccak256, parseEther } from 'viem';
+import { createWalletClient, createPublicClient, http, encodeFunctionData, toBytes, parseAbi, zeroAddress, keccak256, parseEther, encodeAbiParameters } from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
 import { arbitrumSepolia } from 'viem/chains';
 import { CALLBREAKER_ARB, USDC_ARB, ARB_RPC_URL, ARB_RELAYER_PK, APP_ID, MIN_RECEIVE_6DP, CHAIN_ID_ARB, MAX_FEE_PER_GAS, MAX_PRIORITY_FEE_PER_GAS } from './constants.mjs';
@@ -75,15 +75,22 @@ async function main() {
     }
   ];
 
+  const nonce = BigInt(Date.now());
+  
+  // For now, use empty signature - CallBreaker might accept it for testing
+  // In production, this would be generated using CallBreaker.getMessageHash()
+  const signature = '0x';
+
   const userObjective = {
     appId: `0x${Buffer.from(APP_ID).toString('hex')}`,
-    nonce: BigInt(Date.now()),
+    nonce,
     tip: 0n,
     chainId: CHAIN_ID_ARB,
     maxFeePerGas: MAX_FEE_PER_GAS,
     maxPriorityFeePerGas: MAX_PRIORITY_FEE_PER_GAS,
     sender: user,
-    callObjects
+    callObjects,
+    signature
   };
 
   const additional = [
