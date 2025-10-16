@@ -4,8 +4,8 @@ import { privateKeyToAccount } from 'viem/accounts';
 import { arbitrumSepolia, baseSepolia } from 'viem/chains';
 import { erc20Abi } from './utils/abi.mjs';
 
-// Real STXN CallBreaker ABI
-const realSTXNAbi = [
+// Real Solver + CallBreaker CallBreaker ABI
+const realSolver + CallBreakerAbi = [
   {
     "type": "function",
     "name": "pushUserObjective",
@@ -50,7 +50,7 @@ const realSTXNAbi = [
 ];
 
 async function main() {
-  console.log('🎯 REAL STXN INTEGRATION IMPLEMENTATION 🎯\n');
+  console.log('🎯 REAL Solver + CallBreaker INTEGRATION IMPLEMENTATION 🎯\n');
   console.log('💡 Addressing the fundamental issues you identified\n');
 
   const account = privateKeyToAccount(process.env.ARB_RELAYER_PK);
@@ -80,8 +80,8 @@ async function main() {
   console.log('🔍 PROBLEM ANALYSIS:');
   console.log('\n❌ Current Issues You Identified:');
   console.log('   1. Escrow contract cannot send funds (no private key)');
-  console.log('   2. No STXN CallBreaker on Ethereum Sepolia');
-  console.log('   3. No real STXN integration - just manual transfers');
+  console.log('   2. No Solver + CallBreaker CallBreaker on Ethereum Sepolia');
+  console.log('   3. No real Solver + CallBreaker integration - just manual transfers');
   console.log('   4. Missing escrow withdrawal mechanism');
   console.log('   5. No atomic execution guarantees');
 
@@ -93,15 +93,15 @@ async function main() {
   console.log('   ✅ Funds stay IN contract (not sent to VAULT)');
   console.log('   ✅ solverClaim() function for authorized solvers');
   console.log('   ✅ emergencyWithdraw() after timeout');
-  console.log('   ✅ Real STXN CallBreaker integration');
+  console.log('   ✅ Real Solver + CallBreaker CallBreaker integration');
 
-  // Solution 2: Real STXN Integration
-  console.log('\n🎯 Solution 2: Real STXN CallBreaker Usage');
-  console.log('   📍 STXN CallBreaker: 0x7f71a9c6b157aa17501cb30b36c3d1affe7059cc');
+  // Solution 2: Real Solver + CallBreaker Integration
+  console.log('\n🎯 Solution 2: Real Solver + CallBreaker CallBreaker Usage');
+  console.log('   📍 Solver + CallBreaker CallBreaker: 0x7f71a9c6b157aa17501cb30b36c3d1affe7059cc');
   console.log('   🌐 Chain: Arbitrum Sepolia (where it\'s deployed)');
-  console.log('   💡 Bridge direction: Base → Arbitrum (using real STXN)');
+  console.log('   💡 Bridge direction: Base → Arbitrum (using real Solver + CallBreaker)');
 
-  // Check STXN CallBreaker status
+  // Check Solver + CallBreaker CallBreaker status
   try {
     const callbreakerBalance = await arbPublicClient.readContract({
       address: process.env.CALLBREAKER_ARB,
@@ -118,26 +118,26 @@ async function main() {
       args: [account.address]
     });
 
-    console.log(`   ✅ STXN CallBreaker accessible: ${Number(callbreakerBalance) / 1e18} ETH balance`);
+    console.log(`   ✅ Solver + CallBreaker CallBreaker accessible: ${Number(callbreakerBalance) / 1e18} ETH balance`);
 
   } catch (e) {
-    console.log('   ❌ STXN CallBreaker check failed:', e.message);
+    console.log('   ❌ Solver + CallBreaker CallBreaker check failed:', e.message);
   }
 
   // Solution 3: Real Cross-Chain Coordination
   console.log('\n🌉 Solution 3: Real Cross-Chain Bridge Flow');
   console.log('   1. User deposits USDC to ImprovedBaseDepositEscrow');
-  console.log('   2. Contract pushes objective to STXN CallBreaker');
-  console.log('   3. STXN coordinates with Arbitrum solvers');
+  console.log('   2. Contract pushes objective to Solver + CallBreaker CallBreaker');
+  console.log('   3. Solver + CallBreaker coordinates with Arbitrum solvers');
   console.log('   4. Solver sends USDC to user on Arbitrum');
   console.log('   5. Solver calls solverClaim() with proof');
   console.log('   6. Contract releases escrowed USDC to solver');
 
-  // Solution 4: Demonstrate Real STXN Objective
-  console.log('\n📤 Solution 4: Creating Real STXN Objective');
+  // Solution 4: Demonstrate Real Solver + CallBreaker Objective
+  console.log('\n📤 Solution 4: Creating Real Solver + CallBreaker Objective');
   
   try {
-    // Create real STXN objective for Base → Arbitrum bridge
+    // Create real Solver + CallBreaker objective for Base → Arbitrum bridge
     const transferCalldata = encodeFunctionData({
       abi: erc20Abi,
       functionName: 'transfer',
@@ -145,14 +145,14 @@ async function main() {
     });
 
     const signature = await account.signMessage({ 
-      message: `Real STXN Bridge ${Date.now()}` 
+      message: `Real Solver + CallBreaker Bridge ${Date.now()}` 
     });
 
     const userObjective = {
       appId: `0x${Buffer.from("app.cross.fastfill.v1").toString('hex')}`,
       nonce: BigInt(Date.now()),
       tip: parseEther('0.0001'),
-      chainId: 421614n, // Arbitrum Sepolia (where STXN is deployed)
+      chainId: 421614n, // Arbitrum Sepolia (where Solver + CallBreaker is deployed)
       maxFeePerGas: parseEther('0.000000002'),
       maxPriorityFeePerGas: parseEther('0.000000001'),
       sender: account.address,
@@ -172,11 +172,11 @@ async function main() {
       ]
     };
 
-    console.log('   📤 Pushing REAL objective to STXN CallBreaker...');
+    console.log('   📤 Pushing REAL objective to Solver + CallBreaker CallBreaker...');
     
     const objectiveTx = await arbClient.writeContract({
       address: process.env.CALLBREAKER_ARB,
-      abi: realSTXNAbi,
+      abi: realSolver + CallBreakerAbi,
       functionName: 'pushUserObjective',
       args: [userObjective, []],
       value: 0n
@@ -186,23 +186,23 @@ async function main() {
       hash: objectiveTx 
     });
 
-    console.log('   ✅ REAL STXN OBJECTIVE CREATED!');
+    console.log('   ✅ REAL Solver + CallBreaker OBJECTIVE CREATED!');
     console.log('   📝 Arbitrum TX:', objectiveTx);
     console.log('   🌐 Verify:', `https://sepolia.arbiscan.io/tx/${objectiveTx}`);
     console.log('   ⛽ Gas used:', objectiveReceipt.gasUsed.toString());
 
   } catch (e) {
-    console.log('   ❌ STXN objective creation failed:', e.message);
+    console.log('   ❌ Solver + CallBreaker objective creation failed:', e.message);
   }
 
-  console.log('\n🎉 REAL STXN INTEGRATION SUMMARY 🎉');
+  console.log('\n🎉 REAL Solver + CallBreaker INTEGRATION SUMMARY 🎉');
   
   console.log('\n✅ WHAT\'S NOW REAL:');
   console.log('   • ImprovedBaseDepositEscrow: Proper fund holding ✅');
-  console.log('   • STXN CallBreaker: Real integration on Arbitrum ✅');
+  console.log('   • Solver + CallBreaker CallBreaker: Real integration on Arbitrum ✅');
   console.log('   • Solver authorization: Controlled access ✅');
   console.log('   • Emergency withdrawals: User protection ✅');
-  console.log('   • Cross-chain objectives: Real STXN coordination ✅');
+  console.log('   • Cross-chain objectives: Real Solver + CallBreaker coordination ✅');
 
   console.log('\n🔧 NEXT STEPS:');
   console.log('   1. Deploy ImprovedBaseDepositEscrow contract');
@@ -215,7 +215,7 @@ async function main() {
   console.log('   You were absolutely right about the flaws!');
   console.log('   The improved implementation addresses all issues:');
   console.log('   • Real escrow mechanism');
-  console.log('   • Real STXN integration');
+  console.log('   • Real Solver + CallBreaker integration');
   console.log('   • Proper solver coordination');
   console.log('   • Production-ready architecture');
 }

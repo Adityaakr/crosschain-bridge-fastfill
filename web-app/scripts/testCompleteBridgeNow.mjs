@@ -4,8 +4,8 @@ import { privateKeyToAccount } from 'viem/accounts';
 import { arbitrumSepolia, baseSepolia } from 'viem/chains';
 import { erc20Abi } from './utils/abi.mjs';
 
-// Real STXN CallBreaker ABI with signature field
-const realSTXNAbi = [
+// Real Solver + CallBreaker CallBreaker ABI with signature field
+const realSolver + CallBreakerAbi = [
   {
     "type": "function",
     "name": "pushUserObjective",
@@ -57,8 +57,8 @@ const realSTXNAbi = [
 ];
 
 async function main() {
-  console.log('🚀 TESTING COMPLETE STXN BRIDGE - LIVE TEST 🚀\n');
-  console.log('💡 Using real contracts, real USDC, real STXN CallBreaker\n');
+  console.log('🚀 TESTING COMPLETE Solver + CallBreaker BRIDGE - LIVE TEST 🚀\n');
+  console.log('💡 Using real contracts, real USDC, real Solver + CallBreaker CallBreaker\n');
 
   const account = privateKeyToAccount(process.env.ARB_RELAYER_PK);
   
@@ -85,7 +85,7 @@ async function main() {
   });
 
   console.log('👤 User Address:', account.address);
-  console.log('🏗️ Real STXN CallBreaker:', process.env.CALLBREAKER_ARB);
+  console.log('🏗️ Real Solver + CallBreaker CallBreaker:', process.env.CALLBREAKER_ARB);
   console.log('🏦 BaseDepositEscrow:', process.env.BASE_DEPOSIT_ESCROW);
 
   // Step 1: Check current state
@@ -115,7 +115,7 @@ async function main() {
 
     const callbreakerBalance = await arbPublicClient.readContract({
       address: process.env.CALLBREAKER_ARB,
-      abi: realSTXNAbi,
+      abi: realSolver + CallBreakerAbi,
       functionName: 'senderBalances',
       args: [account.address]
     });
@@ -135,8 +135,8 @@ async function main() {
     return;
   }
 
-  // Step 2: Push new objective to STXN CallBreaker
-  console.log('\n🎯 Step 2: Pushing Fresh Objective to Real STXN...');
+  // Step 2: Push new objective to Solver + CallBreaker CallBreaker
+  console.log('\n🎯 Step 2: Pushing Fresh Objective to Real Solver + CallBreaker...');
   
   try {
     // Create USDC transfer call for Arbitrum
@@ -148,7 +148,7 @@ async function main() {
 
     // Create user signature
     const signature = await account.signMessage({ 
-      message: `STXN Bridge ${Date.now()}` 
+      message: `Solver + CallBreaker Bridge ${Date.now()}` 
     });
 
     const userObjective = {
@@ -175,13 +175,13 @@ async function main() {
       ]
     };
 
-    console.log('   📤 Pushing to real STXN CallBreaker...');
+    console.log('   📤 Pushing to real Solver + CallBreaker CallBreaker...');
     console.log('   💰 Requesting: 9.8 USDC on Arbitrum');
     console.log('   💸 Offering: 10 USDC from Base escrow');
 
     const pushTx = await arbClient.writeContract({
       address: process.env.CALLBREAKER_ARB,
-      abi: realSTXNAbi,
+      abi: realSolver + CallBreakerAbi,
       functionName: 'pushUserObjective',
       args: [userObjective, []],
       value: 0n
@@ -274,13 +274,13 @@ async function main() {
 
   console.log('\n🎉 LIVE BRIDGE TEST COMPLETE! 🎉');
   console.log('\n📋 Results:');
-  console.log('   ✅ Real STXN CallBreaker: Objective pushed');
+  console.log('   ✅ Real Solver + CallBreaker CallBreaker: Objective pushed');
   console.log('   ✅ Real USDC escrow: 10 USDC available');
   console.log('   ✅ Bridge infrastructure: 100% functional');
   console.log('   ⏳ Solver execution: Monitored for activity');
   
   console.log('\n🚀 Bridge Status: LIVE AND READY!');
-  console.log('   Your bridge is now live on STXN network');
+  console.log('   Your bridge is now live on Solver + CallBreaker network');
   console.log('   Solvers can detect and execute your objectives');
   console.log('   Real cross-chain USDC transfers are possible!');
 }

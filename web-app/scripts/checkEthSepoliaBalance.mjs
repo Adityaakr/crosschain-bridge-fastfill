@@ -111,7 +111,7 @@ async function main() {
     }
 
     console.log('\n🔧 NEXT STEPS IF READY:');
-    console.log('   1. Find/deploy STXN CallBreaker on Ethereum');
+    console.log('   1. Find/deploy Solver + CallBreaker CallBreaker on Ethereum');
     console.log('   2. Deploy EthPostApprove contract');
     console.log('   3. Update .env with Ethereum details');
     console.log('   4. Execute Base → Ethereum bridge');

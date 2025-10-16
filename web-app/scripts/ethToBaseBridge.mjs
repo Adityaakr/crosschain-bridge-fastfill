@@ -4,8 +4,8 @@ import { privateKeyToAccount } from 'viem/accounts';
 import { sepolia, baseSepolia } from 'viem/chains';
 import { erc20Abi } from './utils/abi.mjs';
 
-// Real STXN CallBreaker ABI
-const realSTXNAbi = [
+// Real Solver + CallBreaker CallBreaker ABI
+const realSolver + CallBreakerAbi = [
   {
     "type": "function",
     "name": "pushUserObjective",
@@ -136,8 +136,8 @@ async function main() {
     return;
   }
 
-  // Step 3: Create STXN objective for Base chain execution
-  console.log('\n🎯 Step 3: Creating STXN Objective for Base Transfer...');
+  // Step 3: Create Solver + CallBreaker objective for Base chain execution
+  console.log('\n🎯 Step 3: Creating Solver + CallBreaker Objective for Base Transfer...');
   
   try {
     // Create USDC transfer call for Base chain
@@ -175,8 +175,8 @@ async function main() {
       ]
     };
 
-    // Push objective to STXN CallBreaker (using Arbitrum one for demo)
-    console.log('   📤 Pushing cross-chain objective to STXN...');
+    // Push objective to Solver + CallBreaker CallBreaker (using Arbitrum one for demo)
+    console.log('   📤 Pushing cross-chain objective to Solver + CallBreaker...');
     console.log('   🎯 Target: Send USDC to user on Base');
     
     const arbClient = createWalletClient({
@@ -192,7 +192,7 @@ async function main() {
 
     const objectiveTx = await arbClient.writeContract({
       address: process.env.CALLBREAKER_ARB,
-      abi: realSTXNAbi,
+      abi: realSolver + CallBreakerAbi,
       functionName: 'pushUserObjective',
       args: [userObjective, []],
       value: 0n
@@ -202,12 +202,12 @@ async function main() {
       hash: objectiveTx 
     });
 
-    console.log('   ✅ STXN objective created!');
+    console.log('   ✅ Solver + CallBreaker objective created!');
     console.log('   📝 Arbitrum TX:', objectiveTx);
     console.log('   🌐 Verify:', `https://sepolia.arbiscan.io/tx/${objectiveTx}`);
 
   } catch (e) {
-    console.log('   ❌ STXN objective creation failed:', e.message);
+    console.log('   ❌ Solver + CallBreaker objective creation failed:', e.message);
   }
 
   // Step 4: Solver executes on Base (sends USDC to user)
@@ -275,7 +275,7 @@ async function main() {
   console.log('\n🎉 ETHEREUM → BASE BRIDGE COMPLETE! 🎉');
   console.log('\n📋 What We Demonstrated:');
   console.log('   ✅ Cross-chain bridge coordination');
-  console.log('   ✅ STXN objective creation');
+  console.log('   ✅ Solver + CallBreaker objective creation');
   console.log('   ✅ Real USDC transfer on Base');
   console.log('   ✅ Solver profit mechanism');
   

@@ -32,8 +32,8 @@ async function main() {
   console.log('   ❌ Problem: Users cannot get their funds back easily');
   console.log('   💡 Impact: Bridge appears broken to users');
 
-  console.log('\n📋 Case 2: STXN OBJECTIVES EXPIRE');
-  console.log('   ⏰ STXN objectives may have timeouts');
+  console.log('\n📋 Case 2: Solver + CallBreaker OBJECTIVES EXPIRE');
+  console.log('   ⏰ Solver + CallBreaker objectives may have timeouts');
   console.log('   🔄 Expired objectives get removed from solver queue');
   console.log('   💡 Impact: Bridge requests become invalid over time');
 
@@ -61,7 +61,7 @@ async function main() {
 
   console.log('\n💡 Solution 3: PARTIAL BRIDGE COMPLETION');
   console.log('   ✅ Show deposit mechanism works');
-  console.log('   ✅ Show STXN integration works');
+  console.log('   ✅ Show Solver + CallBreaker integration works');
   console.log('   ✅ Show objective creation works');
   console.log('   ⏳ Wait for solver ecosystem to mature');
 
@@ -80,7 +80,7 @@ async function main() {
   console.log('\n⚠️ RISKS OF NO ARBITRUM USDC:');
   console.log('   • User funds locked in escrow');
   console.log('   • Bridge appears non-functional');
-  console.log('   • STXN objectives expire unused');
+  console.log('   • Solver + CallBreaker objectives expire unused');
   console.log('   • Cannot demonstrate full flow');
 
   console.log('\n✅ MITIGATIONS:');
@@ -94,7 +94,7 @@ async function main() {
   console.log('\n1️⃣ SHORT TERM (No Arbitrum USDC):');
   console.log('   • Document current achievements');
   console.log('   • Show infrastructure is 100% ready');
-  console.log('   • Demonstrate STXN integration works');
+  console.log('   • Demonstrate Solver + CallBreaker integration works');
   console.log('   • Wait for testnet solver ecosystem');
 
   console.log('\n2️⃣ MEDIUM TERM (Get Arbitrum USDC):');
@@ -110,7 +110,7 @@ async function main() {
 
   console.log('\n🌟 CURRENT STATUS SUMMARY:');
   console.log('   ✅ Bridge infrastructure: 100% complete');
-  console.log('   ✅ STXN integration: Fully working');
+  console.log('   ✅ Solver + CallBreaker integration: Fully working');
   console.log('   ✅ Security: Production-ready');
   console.log('   ✅ User experience: Seamless deposits');
   console.log('   ⏳ Missing: Only testnet solver liquidity');
@@ -119,7 +119,7 @@ async function main() {
   console.log('   Your bridge is PRODUCTION READY!');
   console.log('   Testnet limitations don\'t reflect mainnet reality.');
   console.log('   On mainnet, solvers have abundant liquidity.');
-  console.log('   You\'ve built a fully functional STXN Fast-Fill Bridge!');
+  console.log('   You\'ve built a fully functional Solver + CallBreaker Fast-Fill Bridge!');
 }
 
 main().catch(console.error);

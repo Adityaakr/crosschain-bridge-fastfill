@@ -28,7 +28,7 @@ async function main() {
   console.log('   Base USDC:', process.env.USDC_BASE);
   console.log('   Arbitrum USDC:', process.env.USDC_ARB);
   console.log('   BaseDepositEscrow:', process.env.BASE_DEPOSIT_ESCROW);
-  console.log('   STXN CallBreaker:', process.env.CALLBREAKER_ARB);
+  console.log('   Solver + CallBreaker CallBreaker:', process.env.CALLBREAKER_ARB);
 
   try {
     // === BASE CHAIN BALANCES ===
@@ -82,7 +82,7 @@ async function main() {
     });
     console.log(`   User USDC: ${Number(arbUserUsdc) / 1e6} USDC`);
 
-    // STXN CallBreaker balance check
+    // Solver + CallBreaker CallBreaker balance check
     const callbreakerEth = await arbPublicClient.getBalance({
       address: process.env.CALLBREAKER_ARB
     });

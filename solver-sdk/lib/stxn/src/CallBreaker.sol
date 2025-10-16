@@ -114,8 +114,8 @@ contract CallBreaker is ICallBreaker, ISmartExecute, ReentrancyGuard, Ownable {
     /// @param amount The amount of ETH deposited in wei
     event Deposit(address indexed sender, uint256 amount);
 
-    /// @notice Emitted when the verifyStxn function is called
-    event VerifyStxn();
+    /// @notice Emitted when the verifySolver + CallBreaker function is called
+    event VerifySolver + CallBreaker();
 
     /// @notice Emitted when the call indices are populated
     event CallIndicesPopulated();
@@ -193,7 +193,7 @@ contract CallBreaker is ICallBreaker, ISmartExecute, ReentrancyGuard, Ownable {
             }
         }
 
-        emit VerifyStxn();
+        emit VerifySolver + CallBreaker();
     }
 
     function expectFutureCall(CallObject memory callObj) external view returns (bool isExecutedInFuture) {
@@ -223,7 +223,7 @@ contract CallBreaker is ICallBreaker, ISmartExecute, ReentrancyGuard, Ownable {
         }
     }
 
-    /// @notice Emits the submitted user objective to be executed by a stxn hub
+    /// @notice Emits the submitted user objective to be executed by a Solver + CallBreaker hub
     /// @param _userObjective The user objective to be executed
     /// @param _additionalData Additional data to be used in the execution
     /// @return requestId Unique identifier for the pushed objective

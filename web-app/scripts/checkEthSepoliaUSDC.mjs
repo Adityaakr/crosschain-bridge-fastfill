@@ -115,11 +115,11 @@ async function main() {
 
   console.log('\n⚠️ CONSIDERATIONS:');
   console.log('   • Higher gas costs on Ethereum');
-  console.log('   • Need STXN CallBreaker on Ethereum');
+  console.log('   • Need Solver + CallBreaker CallBreaker on Ethereum');
   console.log('   • May need to redeploy ArbPostApprove equivalent');
 
   console.log('\n🔧 IMPLEMENTATION STEPS:');
-  console.log('   1. Find/deploy STXN CallBreaker on Ethereum Sepolia');
+  console.log('   1. Find/deploy Solver + CallBreaker CallBreaker on Ethereum Sepolia');
   console.log('   2. Deploy EthPostApprove contract (like ArbPostApprove)');
   console.log('   3. Update bridge scripts for Ethereum chain');
   console.log('   4. Get USDC on Ethereum Sepolia');

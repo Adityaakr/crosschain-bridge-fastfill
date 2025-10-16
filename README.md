@@ -1,98 +1,113 @@
-# Cross-Chain Bridge Fast-Fill
+# Solver + CallBreaker Cross-Chain Bridge
 
-A production-ready USDC bridge with instant liquidity using STXN protocol integration.
+A professional cross-chain USDC bridge with instant liquidity using the Solver + CallBreaker protocol for Arbitrum ↔ Base transfers.
 
 ## **Features**
 
-- **Gasless Deposits**: Users deposit on Base without requiring on-chain signatures at deposit time
-- **Instant Fast-Fill**: Receive USDC on Arbitrum within ~1-2 blocks using solver inventory
-- **MEV Protection**: STXN post-approve guard guarantees ≥98% of deposit amount (max 2% fee)
-- **Real STXN Integration**: Uses actual STXN CallBreaker contracts, not mocks
-- **Production Security**: Comprehensive safety checks and validations
+- **Professional Web Interface**: Modern React/Next.js interface with real-time transaction visualization
+- **Cross-Chain Bridge**: Arbitrum → Base USDC transfers with instant liquidity
+- **Solver + CallBreaker Protocol**: 3-step flow with burner address security
+- **Live Transaction Tracking**: Real-time balance updates and transaction monitoring
+- **Professional Design**: Corporate-grade UI with landscape layout and prominent balances
+- **Multi-Wallet Support**: Separate user and solver wallet architecture
 
 ## 🏗️ **Architecture**
 
 ### Bridge Flow
-1. **User Deposit on Base**: Gasless deposit via `depositFor` function
-2. **STXN Objective Creation**: Push UserObjective to real STXN CallBreaker
-3. **Solver Execution**: Real STXN solvers provide instant liquidity
-4. **Post-Approve Validation**: Ensures ≥98% of deposit amount received
+1. **Step 1 - User Deposit**: User deposits USDC to burner address on Arbitrum Sepolia
+2. **Step 2 - Instant Liquidity**: Solver provides 99% USDC to receiver on Base Sepolia  
+3. **Step 3 - Solver Claim**: Solver claims deposited USDC from burner address
+4. **Professional UI**: Real-time visualization with transaction hashes and explorer links
 
 ### Project Structure
 ```
+web-app/
+  app/
+    components/
+      BridgeInterface.tsx       # Main bridge interface
+      TransactionFlow.tsx       # Live transaction visualization
+      BridgeArchitecture.tsx    # Architecture diagram
+      FlowDiagram.tsx          # 3-step flow visualization
+    lib/
+      flowBridge.ts            # Core bridge logic
+      escrowBridge.ts          # Alternative bridge implementation
+  
 contracts/
-  BaseDepositEscrow.sol         # Gasless USDC deposits on Base
-  ArbPostApprove.sol           # STXN post-approve guard with MEV protection
-  ImprovedBaseDepositEscrow.sol # Enhanced security version
-  stxn/Types.sol               # STXN protocol interfaces
-
-scripts/
-  deployBase.ts                # Base network deployment
-  pushArbFastFill.ts          # STXN objective creation
-  utils/                      # ABIs and utility functions
-  [40+ utility scripts]       # Comprehensive tooling suite
+  BaseDepositEscrow.sol         # Base network escrow contracts
+  ArbPostApprove.sol           # Arbitrum post-approve validation
+  
+.env                           # Environment configuration (private keys)
 ```
 
 ## 🛠️ **Setup**
 
 ### Prerequisites
 - Node.js 18+
-- Foundry
-- Git with submodules
+- npm or yarn
+- Git
 
 ### Installation
 ```bash
 # Clone the repository
-git clone https://github.com/Adityaakr/crosschain-bridge-fastfill.git
-cd crosschain-bridge-fastfill
+git clone https://github.com/yourusername/solver-callbreaker-bridge.git
+cd solver-callbreaker-bridge
 
-# Install dependencies
+# Install web app dependencies
+cd web-app
 npm install
-
-# Initialize STXN submodule
-git submodule update --init --recursive
 
 # Setup environment
 cp .env.example .env
 # Fill in your private keys and RPC URLs in .env
 ```
 
-### Build Contracts
+### Development
 ```bash
-forge build
+# Start the development server
+cd web-app
+npm run dev
+
+# Open http://localhost:3000 in your browser
 ```
 
 ## 🚀 **Usage**
 
-### Deploy Contracts
+### Using the Bridge Interface
+
+1. **Navigate to Bridge Interface**: Open http://localhost:3000 and go to the "Bridge Interface" tab
+
+2. **Connect Wallets**: The interface shows real balances for:
+   - FROM wallet (0x5A265...): Arbitrum balance for deposits
+   - TO wallet (0x3a159...): Base balance for receiving funds
+
+3. **Execute Bridge Transfer**:
+   - Enter amount (e.g., 0.1 USDC)
+   - Click "Execute Flow Bridge"
+   - Watch the 3-step live visualization
+
+### Bridge Flow Steps
+- **Step 1**: User deposits USDC to burner address on Arbitrum
+- **Step 2**: Solver provides instant liquidity on Base (99% of deposit)
+- **Step 3**: Solver claims deposited funds from burner address
+
+### Wallet Configuration
 ```bash
-# Deploy on Base Sepolia
-npm run deploy:base
+# FROM wallet (deposits on Arbitrum)
+FROM_ADDRESS=0x5A26514ce0AF943540407170B09ceA03cBFf5570
 
-# Deploy on Arbitrum Sepolia  
-npm run deploy:arb
+# TO wallet (receives on Base)  
+TO_ADDRESS=0x3a159d24634A180f3Ab9ff37868358C73226E672
+
+# Burner address (secure escrow)
+BURNER_ADDRESS=0x000000000000000000000000000000000000dEaD
 ```
-
-### Execute Bridge Transfer
-```bash
-# Push fast-fill objective to STXN
-npm run push:arb
-```
-
-### Utility Scripts
-The project includes 40+ utility scripts for:
-- Balance checking across chains
-- Real STXN integration testing
-- Solver simulation and execution
-- Cross-chain bridge orchestration
-- Debugging and verification
 
 ## 🔒 **Security Features**
 
 - **Post-Approve Validation**: Guarantees minimum receive amount
 - **Safe ERC-20 Transfers**: Custom `_safeTransferFrom` implementation
 - **Reentrancy Protection**: Comprehensive security checks
-- **Real STXN Integration**: No mock contracts, production-ready
+- **Real Solver + CallBreaker Integration**: No mock contracts, production-ready
 
 ## 📚 **Documentation**
 
@@ -114,7 +129,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🏆 **Achievements**
 
-- ✅ **STXN Integration**: Working with actual CallBreaker contracts
+- ✅ **Solver + CallBreaker Integration**: Working with actual CallBreaker contracts
 - ✅ **Production Deployments**: Live on Base and Arbitrum testnets
 - ✅ **Comprehensive Tooling**: 40+ scripts for development and testing
 - ✅ **Security Focused**: MEV protection and safety validations

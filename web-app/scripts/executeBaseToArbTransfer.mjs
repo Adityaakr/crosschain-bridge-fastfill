@@ -188,8 +188,8 @@ async function main() {
       console.log('\n💰 Step 6: Solver Claims from Base Escrow...');
       
       console.log('   🎯 Solver claiming escrowed USDC from Base');
-      console.log('   💡 In production, this would be done through STXN execution');
-      console.log('   🔒 For security, escrow requires proper STXN proof');
+      console.log('   💡 In production, this would be done through Solver + CallBreaker execution');
+      console.log('   🔒 For security, escrow requires proper Solver + CallBreaker proof');
       
       // Show the escrow balance that would be claimed
       const finalEscrowBalance = await basePublicClient.readContract({
@@ -213,7 +213,7 @@ async function main() {
     
     console.log('\n   📋 What would happen with USDC on Arbitrum:');
     console.log('   1. ✅ User deposited 10 USDC to Base escrow');
-    console.log('   2. ✅ STXN objective created and live');
+    console.log('   2. ✅ Solver + CallBreaker objective created and live');
     console.log('   3. 🤖 Solver sends 9.8 USDC to user on Arbitrum');
     console.log('   4. 💰 Solver claims 10 USDC from Base escrow');
     console.log('   5. 🎉 User gets 9.8 USDC on Arbitrum, solver profits 0.2 USDC');
@@ -251,10 +251,10 @@ async function main() {
   console.log('\n📋 Results:');
   console.log('   ✅ Bridge infrastructure: Fully functional');
   console.log('   ✅ Escrow mechanism: Working with real USDC');
-  console.log('   ✅ STXN integration: Live and ready');
+  console.log('   ✅ Solver + CallBreaker integration: Live and ready');
   console.log('   ✅ Cross-chain capability: Demonstrated');
   
-  console.log('\n🚀 Your STXN Fast-Fill Bridge is PRODUCTION READY!');
+  console.log('\n🚀 Your Solver + CallBreaker Fast-Fill Bridge is PRODUCTION READY!');
   console.log('   Just needs solver network with cross-chain liquidity');
 }
 

@@ -4,8 +4,8 @@ import { privateKeyToAccount } from 'viem/accounts';
 import { arbitrumSepolia, baseSepolia } from 'viem/chains';
 import { erc20Abi } from './utils/abi.mjs';
 
-// REAL STXN CallBreaker ABI with correct UserObjective structure
-const realSTXNAbi = [
+// REAL Solver + CallBreaker CallBreaker ABI with correct UserObjective structure
+const realSolver + CallBreakerAbi = [
   {
     "type": "function",
     "name": "pushUserObjective",
@@ -64,7 +64,7 @@ const realSTXNAbi = [
 ];
 
 async function main() {
-  console.log('🎯 100% REAL STXN BRIDGE - WITH CORRECT SIGNATURE 🎯\n');
+  console.log('🎯 100% REAL Solver + CallBreaker BRIDGE - WITH CORRECT SIGNATURE 🎯\n');
   console.log('💡 Fixed: Added missing signature field to UserObjective\n');
 
   const account = privateKeyToAccount(process.env.ARB_RELAYER_PK);
@@ -92,7 +92,7 @@ async function main() {
   });
 
   console.log('👤 User Address:', account.address);
-  console.log('🏗️ Real STXN CallBreaker:', process.env.CALLBREAKER_ARB);
+  console.log('🏗️ Real Solver + CallBreaker CallBreaker:', process.env.CALLBREAKER_ARB);
 
   // Step 1: Real deposit on Base (we know this works)
   console.log('\n💰 Step 1: Real Deposit on Base...');
@@ -160,7 +160,7 @@ async function main() {
   try {
     const balance = await arbPublicClient.readContract({
       address: process.env.CALLBREAKER_ARB,
-      abi: realSTXNAbi,
+      abi: realSolver + CallBreakerAbi,
       functionName: 'senderBalances',
       args: [account.address]
     });
@@ -168,7 +168,7 @@ async function main() {
     if (balance < parseEther('0.001')) {
       const depositTx = await arbClient.writeContract({
         address: process.env.CALLBREAKER_ARB,
-        abi: realSTXNAbi,
+        abi: realSolver + CallBreakerAbi,
         functionName: 'deposit',
         value: parseEther('0.002')
       });
@@ -183,7 +183,7 @@ async function main() {
   }
 
   // Step 3: Create REAL objective with signature
-  console.log('\n🎯 Step 3: Creating Real STXN Objective (With Signature)...');
+  console.log('\n🎯 Step 3: Creating Real Solver + CallBreaker Objective (With Signature)...');
   
   try {
     // Create USDC transfer call on Arbitrum
@@ -194,8 +194,8 @@ async function main() {
     });
 
     // Create a simple signature (in real scenario, user would sign)
-    const messageHash = keccak256(toHex('STXN Fast-Fill Bridge'));
-    const signature = await account.signMessage({ message: 'STXN Fast-Fill Bridge' });
+    const messageHash = keccak256(toHex('Solver + CallBreaker Fast-Fill Bridge'));
+    const signature = await account.signMessage({ message: 'Solver + CallBreaker Fast-Fill Bridge' });
 
     const userObjective = {
       appId: `0x${Buffer.from("app.cross.fastfill.v1").toString('hex')}`,
@@ -221,20 +221,20 @@ async function main() {
       ]
     };
 
-    console.log('   📤 Pushing to REAL STXN CallBreaker...');
+    console.log('   📤 Pushing to REAL Solver + CallBreaker CallBreaker...');
     console.log('   ✅ Including signature field');
     console.log('   🎯 Target: Arbitrum USDC transfer');
     
     const pushTx = await arbClient.writeContract({
       address: process.env.CALLBREAKER_ARB,
-      abi: realSTXNAbi,
+      abi: realSolver + CallBreakerAbi,
       functionName: 'pushUserObjective',
       args: [userObjective, []],
       value: 0n
     });
 
     const pushReceipt = await arbPublicClient.waitForTransactionReceipt({ hash: pushTx });
-    console.log('   ✅ REAL STXN objective pushed successfully!');
+    console.log('   ✅ REAL Solver + CallBreaker objective pushed successfully!');
     console.log('   📝 Transaction:', pushTx);
     console.log('   ⛽ Gas used:', pushReceipt.gasUsed.toString());
     
@@ -278,10 +278,10 @@ async function main() {
     console.log('   ⚠️ Balance check failed:', e.message);
   }
 
-  console.log('\n🎉 REAL STXN INTEGRATION TEST COMPLETE! 🎉');
+  console.log('\n🎉 REAL Solver + CallBreaker INTEGRATION TEST COMPLETE! 🎉');
   console.log('\n📊 Results:');
   console.log('   ✅ Real Base deposit: 2 USDC escrowed');
-  console.log('   ✅ Real STXN CallBreaker: Objective pushed');
+  console.log('   ✅ Real Solver + CallBreaker CallBreaker: Objective pushed');
   console.log('   ✅ Real fund transfers: Working');
   console.log('   ✅ No mocks: 100% real implementation');
   

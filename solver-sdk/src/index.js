@@ -3,7 +3,7 @@
 
 export { SolverClient } from './SolverClient.js';
 export { EventMonitor } from './EventMonitor.js';
-export { STXNExecutor } from './STXNExecutor.js';
+export { Solver + CallBreakerExecutor } from './Solver + CallBreakerExecutor.js';
 export { InventoryManager } from './InventoryManager.js';
 export { ProfitCalculator } from './ProfitCalculator.js';
 

@@ -96,7 +96,7 @@ async function main() {
     // Since we can't get real Arbitrum USDC easily, let's show the concept
     // by demonstrating what would happen
     console.log('\n   🤖 What Real Solver Would Do:');
-    console.log('   1. ✅ Detect STXN objective in CallBreaker');
+    console.log('   1. ✅ Detect Solver + CallBreaker objective in CallBreaker');
     console.log('   2. ✅ See 10 USDC available in Base escrow');
     console.log('   3. 📤 Send 9.8 USDC to user on Arbitrum');
     console.log('   4. 💰 Claim 10 USDC from Base escrow');
@@ -152,7 +152,7 @@ async function main() {
   console.log('\n🎉 CROSS-CHAIN TRANSFER CONCEPT COMPLETE! 🎉');
   console.log('\n📋 What We Demonstrated:');
   console.log('   ✅ Real USDC deposits to escrow');
-  console.log('   ✅ Real STXN objective creation');
+  console.log('   ✅ Real Solver + CallBreaker objective creation');
   console.log('   ✅ Real fund transfers (simulated cross-chain)');
   console.log('   ✅ Complete bridge architecture');
   
@@ -164,7 +164,7 @@ async function main() {
   console.log('\n🌟 Your Bridge is 100% Ready for Real Cross-Chain Transfers!');
   console.log('   Infrastructure: ✅ Complete');
   console.log('   Security: ✅ Production-ready');
-  console.log('   STXN Integration: ✅ Working');
+  console.log('   Solver + CallBreaker Integration: ✅ Working');
   console.log('   Only need: Arbitrum USDC liquidity');
 }
 

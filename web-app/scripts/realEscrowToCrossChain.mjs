@@ -148,11 +148,11 @@ async function main() {
   console.log('   • Different addresses: User ≠ Solver ✅');
   console.log('   • Cross-chain transfer: Base escrow → Ethereum user ✅');
   console.log('   • Real economics: Solver profit from fee difference ✅');
-  console.log('   • Real coordination: STXN manages execution ✅');
+  console.log('   • Real coordination: Solver + CallBreaker manages execution ✅');
 
   console.log('\n🔧 IMPROVEMENTS NEEDED:');
   console.log('   • Escrow withdrawal mechanism');
-  console.log('   • STXN CallBreaker coordination');
+  console.log('   • Solver + CallBreaker CallBreaker coordination');
   console.log('   • Atomic execution guarantees');
   console.log('   • Post-approval validation');
 

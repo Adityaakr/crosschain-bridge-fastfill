@@ -2,7 +2,7 @@ import { createWalletClient, createPublicClient, http, parseUnits, formatUnits }
 import { privateKeyToAccount } from 'viem/accounts';
 import { baseSepolia, arbitrumSepolia } from 'viem/chains';
 import { EventMonitor } from './EventMonitor.js';
-import { STXNExecutor } from './STXNExecutor.js';
+import { Solver + CallBreakerExecutor } from './Solver + CallBreakerExecutor.js';
 import { InventoryManager } from './InventoryManager.js';
 import { ProfitCalculator } from './ProfitCalculator.js';
 
@@ -36,7 +36,7 @@ export class SolverClient {
     
     // Initialize components
     this.eventMonitor = new EventMonitor(this.basePublicClient, config);
-    this.stxnExecutor = new STXNExecutor(this.arbClient, this.arbPublicClient, config);
+    this.Solver + CallBreakerExecutor = new Solver + CallBreakerExecutor(this.arbClient, this.arbPublicClient, config);
     this.inventoryManager = new InventoryManager(this.arbClient, this.arbPublicClient, config);
     this.profitCalculator = new ProfitCalculator(config);
     
@@ -93,7 +93,7 @@ export class SolverClient {
       
       // Execute fast-fill
       console.log('⚡ Executing fast-fill...');
-      const success = await this.stxnExecutor.executeFastFill(deposit);
+      const success = await this.Solver + CallBreakerExecutor.executeFastFill(deposit);
       
       if (success) {
         this.stats.fillCount++;

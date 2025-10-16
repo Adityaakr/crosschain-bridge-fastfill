@@ -79,7 +79,7 @@ async function main() {
     
     console.log('\n💡 Solutions:');
     console.log('   1. Get more Base Sepolia ETH from faucets');
-    console.log('   2. The escrow contract may not need ETH for STXN operations');
+    console.log('   2. The escrow contract may not need ETH for Solver + CallBreaker operations');
     console.log('   3. Solvers typically provide their own gas');
   }
 

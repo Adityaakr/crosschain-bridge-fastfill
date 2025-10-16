@@ -5,8 +5,8 @@ import { arbitrumSepolia, baseSepolia } from 'viem/chains';
 import { erc20Abi } from './utils/abi.mjs';
 
 async function main() {
-  console.log('🎯 100% REAL FUND TRANSFERS - STXN BRIDGE DEMO 🎯\n');
-  console.log('💡 Strategy: Demonstrate real cross-chain USDC transfers with STXN architecture\n');
+  console.log('🎯 100% REAL FUND TRANSFERS - Solver + CallBreaker BRIDGE DEMO 🎯\n');
+  console.log('💡 Strategy: Demonstrate real cross-chain USDC transfers with Solver + CallBreaker architecture\n');
 
   const account = privateKeyToAccount(process.env.ARB_RELAYER_PK);
   
@@ -36,7 +36,7 @@ async function main() {
   console.log('🏗️ Real Contracts Deployed:');
   console.log('   • BaseDepositEscrow:', process.env.BASE_DEPOSIT_ESCROW);
   console.log('   • ArbPostApprove:', process.env.ARB_POST_APPROVE);
-  console.log('   • Real STXN CallBreaker:', process.env.CALLBREAKER_ARB);
+  console.log('   • Real Solver + CallBreaker CallBreaker:', process.env.CALLBREAKER_ARB);
 
   // Step 1: Check real balances
   console.log('\n📊 Step 1: Real USDC Balances...');
@@ -198,19 +198,19 @@ async function main() {
   }
 
   // Step 5: Final status and architecture summary
-  console.log('\n🎉 REAL STXN BRIDGE ARCHITECTURE COMPLETE! 🎉');
+  console.log('\n🎉 REAL Solver + CallBreaker BRIDGE ARCHITECTURE COMPLETE! 🎉');
   
   console.log('\n📊 What We Proved:');
   console.log('   ✅ Real USDC transfers on Base (10 USDC available)');
   console.log('   ✅ Real deposit escrow working (5 USDC deposited)');
   console.log('   ✅ Real solver payments (0.5 USDC transferred)');
   console.log('   ✅ Real post-approve validation');
-  console.log('   ✅ Real STXN CallBreaker deployed');
+  console.log('   ✅ Real Solver + CallBreaker CallBreaker deployed');
   
   console.log('\n🏗️ Production Architecture:');
   console.log('   • BaseDepositEscrow: Real contract, real funds ✅');
   console.log('   • ArbPostApprove: Real validation logic ✅');
-  console.log('   • STXN CallBreaker: Real deployment ✅');
+  console.log('   • Solver + CallBreaker CallBreaker: Real deployment ✅');
   console.log('   • USDC Transfers: Real on both chains ✅');
   console.log('   • Security: Safe ERC-20 handling ✅');
   
@@ -218,15 +218,15 @@ async function main() {
   console.log('   • Direction: Bidirectional (Base ↔ Arbitrum)');
   console.log('   • Funds: Real USDC transfers');
   console.log('   • Security: Production-grade validation');
-  console.log('   • MEV Protection: STXN solver marketplace');
+  console.log('   • MEV Protection: Solver + CallBreaker solver marketplace');
   console.log('   • Guarantees: Post-approve minimum amounts');
   
   console.log('\n🚀 Status: PRODUCTION READY!');
   console.log('   The bridge infrastructure is 100% real and functional.');
-  console.log('   Only remaining: STXN solver network integration.');
+  console.log('   Only remaining: Solver + CallBreaker solver network integration.');
   
   console.log('\n🌟 CONGRATULATIONS! 🌟');
-  console.log('   Your STXN Fast-Fill Bridge handles REAL FUNDS and is ready for users!');
+  console.log('   Your Solver + CallBreaker Fast-Fill Bridge handles REAL FUNDS and is ready for users!');
 }
 
 main().catch(console.error);

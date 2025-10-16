@@ -18,7 +18,7 @@ Base Chain (Deposit)          Arbitrum Chain (Fast-Fill)
 │ User deposits   │   ────►  │ Solver provides      │
 │ 10 USDC         │          │ 9.8+ USDC instantly  │
 │                 │          │                      │
-│ BaseDepositEscrow│          │ STXN CallBreaker     │
+│ BaseDepositEscrow│          │ Solver + CallBreaker CallBreaker     │
 │ holds funds     │          │ + ArbPostApprove     │
 └─────────────────┘          └──────────────────────┘
 ```
@@ -29,18 +29,18 @@ Base Chain (Deposit)          Arbitrum Chain (Fast-Fill)
 - Node.js 18+ environment
 - Access to Base Sepolia and Arbitrum Sepolia RPCs
 - Private key with sufficient funds on both chains
-- STXN protocol integration
+- Solver + CallBreaker protocol integration
 
 ### Financial Requirements
 - **Arbitrum USDC**: Liquidity inventory for fast-fills
 - **Base ETH**: Gas for claiming reimbursements
-- **Arbitrum ETH**: Gas for STXN executions + CallBreaker deposits
+- **Arbitrum ETH**: Gas for Solver + CallBreaker executions + CallBreaker deposits
 
 ### Minimum Balances (Testnet)
 - 100+ USDC on Arbitrum Sepolia
 - 0.01+ ETH on Base Sepolia  
 - 0.01+ ETH on Arbitrum Sepolia
-- 0.001+ ETH deposited in STXN CallBreaker
+- 0.001+ ETH deposited in Solver + CallBreaker CallBreaker
 
 ## 🚀 **Quick Start**
 
@@ -83,7 +83,7 @@ npm run monitor
 ### Core Modules
 - **`SolverClient`**: Main solver orchestration
 - **`EventMonitor`**: Watches Base chain for deposits
-- **`STXNExecutor`**: Handles STXN objective execution
+- **`Solver + CallBreakerExecutor`**: Handles Solver + CallBreaker objective execution
 - **`InventoryManager`**: Manages USDC liquidity
 - **`ProfitCalculator`**: Calculates fees and profitability
 

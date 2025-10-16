@@ -5,7 +5,7 @@ import { arbitrumSepolia, baseSepolia } from 'viem/chains';
 import { erc20Abi, ismartExecuteAbi } from './utils/abi.mjs';
 
 async function main() {
-  console.log('🚀 Testing Complete STXN Fast-Fill Bridge Flow...\n');
+  console.log('🚀 Testing Complete Solver + CallBreaker Fast-Fill Bridge Flow...\n');
 
   const account = privateKeyToAccount(process.env.ARB_RELAYER_PK);
   
@@ -171,8 +171,8 @@ async function main() {
     console.log('   ⚠️ CallBreaker funding failed:', e.message);
   }
 
-  // Step 5: Create and Push STXN Objective
-  console.log('\n🎯 Step 5: Creating STXN Fast-Fill Objective...');
+  // Step 5: Create and Push Solver + CallBreaker Objective
+  console.log('\n🎯 Step 5: Creating Solver + CallBreaker Fast-Fill Objective...');
   
   try {
     // Create USDC transfer call (9.8 USDC to user)
@@ -205,7 +205,7 @@ async function main() {
       ]
     };
 
-    console.log('   📤 Pushing UserObjective to STXN CallBreaker...');
+    console.log('   📤 Pushing UserObjective to Solver + CallBreaker CallBreaker...');
     
     const pushTx = await arbClient.writeContract({
       address: process.env.CALLBREAKER_ARB,
@@ -238,15 +238,15 @@ async function main() {
   console.log('\n📋 Summary:');
   console.log('   ✅ Base Deposit Contract: Deployed and functional');
   console.log('   ✅ Arbitrum Post-Approve: Deployed and ready');
-  console.log('   ✅ Real STXN CallBreaker: Deployed and accepting objectives');
+  console.log('   ✅ Real Solver + CallBreaker CallBreaker: Deployed and accepting objectives');
   console.log('   ✅ Bridge Flow: Ready for solver execution');
   
   console.log('\n🔄 Next Steps for Full Operation:');
   console.log('   1. Register post-approver with CallBreaker owner');
-  console.log('   2. Connect STXN solver network');
+  console.log('   2. Connect Solver + CallBreaker solver network');
   console.log('   3. Implement user signature collection');
   
-  console.log('\n🎉 STXN Fast-Fill Bridge is PRODUCTION READY! 🎉');
+  console.log('\n🎉 Solver + CallBreaker Fast-Fill Bridge is PRODUCTION READY! 🎉');
 }
 
 main().catch(console.error);

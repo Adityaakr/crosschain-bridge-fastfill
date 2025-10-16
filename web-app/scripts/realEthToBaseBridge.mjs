@@ -194,7 +194,7 @@ async function main() {
   console.log('   • Real gas fees paid');
   console.log('   • Real solver profit mechanism');
   
-  console.log('\n🌟 Your STXN Fast-Fill Bridge is PRODUCTION READY!');
+  console.log('\n🌟 Your Solver + CallBreaker Fast-Fill Bridge is PRODUCTION READY!');
   console.log('   Infrastructure: ✅ Complete');
   console.log('   Security: ✅ Production-grade');
   console.log('   Real transfers: ✅ Working');

@@ -1,4 +1,4 @@
-# STXN Fast-Fill USDC Bridge - Deployment Status
+# Solver + CallBreaker Fast-Fill USDC Bridge - Deployment Status
 
 ## ✅ COMPLETED
 
@@ -21,7 +21,7 @@
 
 The CallBreaker contract at `0x11C323a5340DAE5B958141d352Acf1cdB41dAc37` is reverting on all calls. This could be due to:
 
-1. **Incorrect CallBreaker address** - Need to verify this is the correct STXN CallBreaker for Arbitrum Sepolia
+1. **Incorrect CallBreaker address** - Need to verify this is the correct Solver + CallBreaker CallBreaker for Arbitrum Sepolia
 2. **Missing app registration** - The app ID might need to be registered with CallBreaker first
 3. **Incorrect ABI** - The CallBreaker interface might be different than expected
 4. **Access control** - There might be permissions or requirements we're missing
@@ -31,7 +31,7 @@ The CallBreaker contract at `0x11C323a5340DAE5B958141d352Acf1cdB41dAc37` is reve
 ### Immediate Actions Needed:
 
 1. **Verify CallBreaker Address**
-   - Check STXN documentation for correct Arbitrum Sepolia CallBreaker address
+   - Check Solver + CallBreaker documentation for correct Arbitrum Sepolia CallBreaker address
    - Or deploy your own CallBreaker instance for testing
 
 2. **Register App with CallBreaker** (if using official instance)
@@ -61,7 +61,7 @@ Arbitrum Sepolia:
 
 ## 🚀 READY TO USE
 
-The bridge infrastructure is **95% complete**! Once the CallBreaker integration is resolved, the bridge will be fully functional for fast-fill USDC transfers from Base to Arbitrum with STXN's solver network.
+The bridge infrastructure is **95% complete**! Once the CallBreaker integration is resolved, the bridge will be fully functional for fast-fill USDC transfers from Base to Arbitrum with Solver + CallBreaker's solver network.
 
 **Key Features Implemented:**
 - ✅ Safe ERC-20 handling

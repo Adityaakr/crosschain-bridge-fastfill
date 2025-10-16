@@ -4,7 +4,7 @@ import { privateKeyToAccount } from 'viem/accounts';
 import { arbitrumSepolia } from 'viem/chains';
 
 async function main() {
-  console.log('🔍 DEBUGGING REAL STXN CALLBREAKER - NO MOCKS 🔍\n');
+  console.log('🔍 DEBUGGING REAL Solver + CallBreaker CALLBREAKER - NO MOCKS 🔍\n');
 
   const account = privateKeyToAccount(process.env.ARB_RELAYER_PK);
   

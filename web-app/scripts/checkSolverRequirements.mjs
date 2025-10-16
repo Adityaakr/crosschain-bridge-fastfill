@@ -127,7 +127,7 @@ async function main() {
   console.log('   • Solver = Your wallet with liquidity on both chains');
   console.log('   • No special contract needed');
   console.log('   • You pay gas for solver transactions');
-  console.log('   • STXN CallBreaker gas already funded ✅');
+  console.log('   • Solver + CallBreaker CallBreaker gas already funded ✅');
   console.log('   • Profit from bridge fees covers gas costs');
 }
 

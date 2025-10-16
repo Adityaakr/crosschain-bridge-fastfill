@@ -4,8 +4,8 @@ import { privateKeyToAccount } from 'viem/accounts';
 import { arbitrumSepolia, baseSepolia } from 'viem/chains';
 import { erc20Abi } from './utils/abi.mjs';
 
-// Real STXN CallBreaker ABI
-const realSTXNAbi = [
+// Real Solver + CallBreaker CallBreaker ABI
+const realSolver + CallBreakerAbi = [
   {
     "type": "function",
     "name": "pushUserObjective",
@@ -248,7 +248,7 @@ async function main() {
     console.log('   📍 From: Arbitrum Sepolia');
     console.log('   📍 To: Base Sepolia');
 
-    // Create STXN objective for Base chain execution
+    // Create Solver + CallBreaker objective for Base chain execution
     const baseTransferCalldata = encodeFunctionData({
       abi: erc20Abi,
       functionName: 'transfer',
@@ -283,12 +283,12 @@ async function main() {
       ]
     };
 
-    // Push objective to STXN CallBreaker on Arbitrum
-    console.log('   📤 Pushing cross-chain objective to STXN...');
+    // Push objective to Solver + CallBreaker CallBreaker on Arbitrum
+    console.log('   📤 Pushing cross-chain objective to Solver + CallBreaker...');
     
     const objectiveTx = await arbClient.writeContract({
       address: process.env.CALLBREAKER_ARB,
-      abi: realSTXNAbi,
+      abi: realSolver + CallBreakerAbi,
       functionName: 'pushUserObjective',
       args: [userObjective, []],
       value: 0n

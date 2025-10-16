@@ -69,7 +69,7 @@ async function main() {
   console.log('\n   📋 Available Options:');
   console.log('   1. Official USDC Bridge (Circle)');
   console.log('   2. Third-party bridges (Stargate, etc.)');
-  console.log('   3. Your STXN Fast-Fill Bridge (needs solver)');
+  console.log('   3. Your Solver + CallBreaker Fast-Fill Bridge (needs solver)');
   console.log('   4. Manual CEX transfer (Base → CEX → Arbitrum)');
 
   // Step 3: Demonstrate the concept with available funds
@@ -89,11 +89,11 @@ async function main() {
   }
 
   // Step 4: Show what your bridge would do
-  console.log('\n🌉 Step 4: Your STXN Bridge Solution...');
+  console.log('\n🌉 Step 4: Your Solver + CallBreaker Bridge Solution...');
   
   console.log('   🎯 How your bridge works:');
   console.log('   1. User deposits USDC on Base → BaseDepositEscrow ✅');
-  console.log('   2. Bridge creates STXN objective ✅');
+  console.log('   2. Bridge creates Solver + CallBreaker objective ✅');
   console.log('   3. Solver with Arbitrum USDC sees opportunity');
   console.log('   4. Solver sends USDC to user on Arbitrum');
   console.log('   5. Solver claims user\'s Base USDC as payment');
@@ -101,7 +101,7 @@ async function main() {
   console.log('\n   💰 Current Status:');
   console.log('   • Your bridge infrastructure: 100% ready ✅');
   console.log('   • User Base USDC: Available ✅');
-  console.log('   • STXN integration: Working ✅');
+  console.log('   • Solver + CallBreaker integration: Working ✅');
   console.log('   • Missing: Solver with Arbitrum USDC liquidity ❌');
 
   // Step 5: Practical demonstration

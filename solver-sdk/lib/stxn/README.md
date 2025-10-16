@@ -1,12 +1,12 @@
-# STXN Smart Contracts v2
+# Solver + CallBreaker Smart Contracts v2
 
-A modular and extensible transaction execution system built to power scalable smart interactions in the Web3 ecosystem. STXN v2 leverages off-chain computation, DAG-based execution, and a solver marketplace for cost-efficient, user-friendly, and interoperable infrastructure.
+A modular and extensible transaction execution system built to power scalable smart interactions in the Web3 ecosystem. Solver + CallBreaker v2 leverages off-chain computation, DAG-based execution, and a solver marketplace for cost-efficient, user-friendly, and interoperable infrastructure.
 
 ---
 
 ## 🚀 Overview
 
-STXN provides a hybrid infrastructure to allow seamless execution of user-defined operations (CallObjects) through off-chain solvers and smart contract execution layers. The system focuses on:
+Solver + CallBreaker provides a hybrid infrastructure to allow seamless execution of user-defined operations (CallObjects) through off-chain solvers and smart contract execution layers. The system focuses on:
 
 - **Cost reduction** through off-chain computation and optimized execution
 - **Frictionless user onboarding** with gasless objective submission
@@ -103,8 +103,8 @@ curl -L https://foundry.paradigm.xyz | bash
 foundryup
 
 # Clone Repository
-git clone git@github.com:smart-transaction/stxn-smart-contracts-v2.git
-cd stxn-smart-contracts-v2
+git clone git@github.com:smart-transaction/Solver + CallBreaker-smart-contracts-v2.git
+cd Solver + CallBreaker-smart-contracts-v2
 
 # Install Dependencies
 forge install
@@ -125,7 +125,7 @@ forge test --match-test testExecuteAndVerifyWithUserReturns -vvv
 
 ### 1. Basic Call Execution
 
-The simplest way to use STXN is to submit a single call objective:
+The simplest way to use Solver + CallBreaker is to submit a single call objective:
 
 ```solidity
 // 1. Create a CallObject
@@ -348,7 +348,7 @@ callBreaker.pushUserObjective(solanaObjective, additionalData);
 
 ### Step 1: Understanding the Architecture
 
-STXN operates on a **user-solver model**:
+Solver + CallBreaker operates on a **user-solver model**:
 
 1. **Users** submit objectives (CallObjects) with signatures
 2. **Solvers** execute objectives in optimal order with DAG dependencies
@@ -358,8 +358,8 @@ STXN operates on a **user-solver model**:
 
 ```bash
 # 1. Clone and setup
-git clone git@github.com:smart-transaction/stxn-smart-contracts-v2.git
-cd stxn-smart-contracts-v2
+git clone git@github.com:smart-transaction/Solver + CallBreaker-smart-contracts-v2.git
+cd Solver + CallBreaker-smart-contracts-v2
 forge install
 
 # 2. Create your test file
@@ -731,8 +731,8 @@ function executeAndVerify(
 - [EIP-712](https://eips.ethereum.org/EIPS/eip-712) - Structured data signing
 
 ### Community
-- [GitHub Issues](https://github.com/smart-transaction/stxn-smart-contracts-v2/issues) - Bug reports and feature requests
-- [Discussions](https://github.com/smart-transaction/stxn-smart-contracts-v2/discussions) - Community discussions
+- [GitHub Issues](https://github.com/smart-transaction/Solver + CallBreaker-smart-contracts-v2/issues) - Bug reports and feature requests
+- [Discussions](https://github.com/smart-transaction/Solver + CallBreaker-smart-contracts-v2/discussions) - Community discussions
 
 ### Security
 - **Audit Status**: In progress
@@ -753,8 +753,8 @@ This project is licensed under the Business Source License 1.1 - see the [LICENS
 
 - **Website**: [smart-transaction.com](https://smart-transaction.com)
 - **Email**: contact@smart-transaction.com
-- **GitHub**: [smart-transaction/stxn-smart-contracts-v2](https://github.com/smart-transaction/stxn-smart-contracts-v2)
-- **Issues**: [GitHub Issues](https://github.com/smart-transaction/stxn-smart-contracts-v2/issues)
+- **GitHub**: [smart-transaction/Solver + CallBreaker-smart-contracts-v2](https://github.com/smart-transaction/Solver + CallBreaker-smart-contracts-v2)
+- **Issues**: [GitHub Issues](https://github.com/smart-transaction/Solver + CallBreaker-smart-contracts-v2/issues)
 
 ---
 

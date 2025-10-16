@@ -244,7 +244,7 @@ async function main() {
     });
 
     await arbPublicClient.waitForTransactionReceipt({ hash: pushTx });
-    console.log('   ✅ Fast-fill objective pushed to STXN!');
+    console.log('   ✅ Fast-fill objective pushed to Solver + CallBreaker!');
     console.log('   📝 Objective TX:', pushTx);
     
   } catch (e) {
@@ -277,14 +277,14 @@ async function main() {
   console.log('   1️⃣ User deposited 10 USDC on Base ✅');
   console.log('   2️⃣ DepositRequested event emitted ✅');
   console.log('   3️⃣ Solver detected deposit ✅');
-  console.log('   4️⃣ Fast-fill objective pushed to STXN ✅');
+  console.log('   4️⃣ Fast-fill objective pushed to Solver + CallBreaker ✅');
   console.log('   5️⃣ Solver executed transfer on Arbitrum ✅');
   console.log('   6️⃣ User received 9.8 USDC instantly ✅');
   console.log('   7️⃣ Post-approve validated minimum amount ✅');
   
-  console.log('\n🏆 STXN FAST-FILL BRIDGE IS 100% FUNCTIONAL! 🏆');
+  console.log('\n🏆 Solver + CallBreaker FAST-FILL BRIDGE IS 100% FUNCTIONAL! 🏆');
   console.log('\n🚀 Key Achievements:');
-  console.log('   ✅ Real STXN integration with CallBreaker');
+  console.log('   ✅ Real Solver + CallBreaker integration with CallBreaker');
   console.log('   ✅ Secure ERC-20 handling');
   console.log('   ✅ MEV protection through solver marketplace');
   console.log('   ✅ Guaranteed minimum amounts via post-approve');
@@ -294,11 +294,11 @@ async function main() {
   console.log('\n🎯 Production Ready Features:');
   console.log('   • Base → Arbitrum USDC bridge');
   console.log('   • 2% maximum fee (0.2 USDC on 10 USDC)');
-  console.log('   • Instant settlement via STXN solvers');
+  console.log('   • Instant settlement via Solver + CallBreaker solvers');
   console.log('   • MEV protection and optimal execution');
   console.log('   • Scalable to any EVM chain');
   
-  console.log('\n🌟 CONGRATULATIONS! Your STXN Fast-Fill Bridge is ready for users! 🌟');
+  console.log('\n🌟 CONGRATULATIONS! Your Solver + CallBreaker Fast-Fill Bridge is ready for users! 🌟');
 }
 
 main().catch(console.error);

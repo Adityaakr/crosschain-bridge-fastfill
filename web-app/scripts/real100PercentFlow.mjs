@@ -5,7 +5,7 @@ import { arbitrumSepolia, baseSepolia } from 'viem/chains';
 import { erc20Abi, ismartExecuteAbi } from './utils/abi.mjs';
 
 async function main() {
-  console.log('🎯 100% REAL STXN BRIDGE: ARBITRUM → BASE 🎯\n');
+  console.log('🎯 100% REAL Solver + CallBreaker BRIDGE: ARBITRUM → BASE 🎯\n');
   console.log('💡 Strategy: Solver on Base already has USDC, user deposits on Arbitrum\n');
 
   const account = privateKeyToAccount(process.env.ARB_RELAYER_PK);
@@ -33,7 +33,7 @@ async function main() {
   });
 
   console.log('👤 User/Solver Address:', account.address);
-  console.log('🏗️ Real STXN CallBreaker:', process.env.CALLBREAKER_ARB);
+  console.log('🏗️ Real Solver + CallBreaker CallBreaker:', process.env.CALLBREAKER_ARB);
 
   // Step 0: Check balances
   console.log('\n📊 Step 0: Checking Initial Balances...');
@@ -57,7 +57,7 @@ async function main() {
   console.log('   💡 Base has USDC (solver liquidity) ✅');
 
   // Step 1: Fund CallBreaker for gas
-  console.log('\n⛽ Step 1: Funding Real STXN CallBreaker...');
+  console.log('\n⛽ Step 1: Funding Real Solver + CallBreaker CallBreaker...');
   
   try {
     const callbreakerBalance = await arbPublicClient.readContract({
@@ -123,7 +123,7 @@ async function main() {
       ]
     };
 
-    console.log('   📤 Pushing to REAL STXN CallBreaker...');
+    console.log('   📤 Pushing to REAL Solver + CallBreaker CallBreaker...');
     console.log('   🎯 Target: Base USDC transfer');
     console.log('   💰 Amount: 0.98 USDC');
     
@@ -136,7 +136,7 @@ async function main() {
     });
 
     const pushReceipt = await arbPublicClient.waitForTransactionReceipt({ hash: pushTx });
-    console.log('   ✅ REAL objective pushed to STXN!');
+    console.log('   ✅ REAL objective pushed to Solver + CallBreaker!');
     console.log('   📝 Transaction:', pushTx);
     console.log('   ⛽ Gas used:', pushReceipt.gasUsed.toString());
     
@@ -236,25 +236,25 @@ async function main() {
   }
 
   // Step 4: Final status
-  console.log('\n🎉 REAL STXN INTEGRATION TEST COMPLETE! 🎉');
+  console.log('\n🎉 REAL Solver + CallBreaker INTEGRATION TEST COMPLETE! 🎉');
   console.log('\n📊 Results:');
-  console.log('   ✅ Real STXN CallBreaker: Deployed and accessible');
+  console.log('   ✅ Real Solver + CallBreaker CallBreaker: Deployed and accessible');
   console.log('   ✅ Real fund transfers: Base USDC working');
   console.log('   ✅ Cross-chain architecture: Ready');
   console.log('   ✅ Solver liquidity: Available on Base');
   
   console.log('\n🚀 Bridge Status:');
   console.log('   • Direction: Arbitrum → Base (optimal for solver liquidity)');
-  console.log('   • STXN Integration: Real CallBreaker deployed');
+  console.log('   • Solver + CallBreaker Integration: Real CallBreaker deployed');
   console.log('   • Fund Transfers: Real USDC on Base');
   console.log('   • Architecture: Production-ready');
   
   console.log('\n🎯 Next Steps for 100% Real Operation:');
   console.log('   1. Resolve CallBreaker objective push (if needed)');
-  console.log('   2. Connect real STXN solver network');
+  console.log('   2. Connect real Solver + CallBreaker solver network');
   console.log('   3. Add user signature collection');
   
-  console.log('\n🌟 YOUR REAL STXN BRIDGE IS READY! 🌟');
+  console.log('\n🌟 YOUR REAL Solver + CallBreaker BRIDGE IS READY! 🌟');
 }
 
 main().catch(console.error);

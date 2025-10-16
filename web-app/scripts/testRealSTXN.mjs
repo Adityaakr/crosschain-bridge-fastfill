@@ -17,7 +17,7 @@ async function main() {
     transport: http(process.env.ARB_RPC_URL)
   });
 
-  console.log('Testing Real STXN CallBreaker...');
+  console.log('Testing Real Solver + CallBreaker CallBreaker...');
   console.log('Account:', account.address);
   console.log('CallBreaker:', process.env.CALLBREAKER_ARB);
 
@@ -39,7 +39,7 @@ async function main() {
     console.log('Deposit failed:', e.message);
   }
 
-  // Now try with the correct STXN format - use our bridge app ID
+  // Now try with the correct Solver + CallBreaker format - use our bridge app ID
   const balanceOf = (addr) => encodeFunctionData({
     abi: erc20Abi,
     functionName: 'balanceOf',

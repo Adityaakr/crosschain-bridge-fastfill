@@ -4,8 +4,8 @@ import { privateKeyToAccount } from 'viem/accounts';
 import { arbitrumSepolia, baseSepolia } from 'viem/chains';
 import { erc20Abi } from './utils/abi.mjs';
 
-// Real STXN CallBreaker ABI
-const realSTXNAbi = [
+// Real Solver + CallBreaker CallBreaker ABI
+const realSolver + CallBreakerAbi = [
   {
     "type": "function",
     "name": "pushUserObjective",
@@ -176,8 +176,8 @@ async function main() {
     }
   }
 
-  // Step 3: Create STXN objective for 5 USDC bridge
-  console.log('\n🎯 Step 3: Creating STXN Objective...');
+  // Step 3: Create Solver + CallBreaker objective for 5 USDC bridge
+  console.log('\n🎯 Step 3: Creating Solver + CallBreaker Objective...');
   
   try {
     const transferCalldata = encodeFunctionData({
@@ -214,18 +214,18 @@ async function main() {
       ]
     };
 
-    console.log('   📤 Pushing 5 USDC objective to STXN...');
+    console.log('   📤 Pushing 5 USDC objective to Solver + CallBreaker...');
     
     const objectiveTx = await arbClient.writeContract({
       address: process.env.CALLBREAKER_ARB,
-      abi: realSTXNAbi,
+      abi: realSolver + CallBreakerAbi,
       functionName: 'pushUserObjective',
       args: [userObjective, []],
       value: 0n
     });
 
     await arbPublicClient.waitForTransactionReceipt({ hash: objectiveTx });
-    console.log('   ✅ STXN objective created!');
+    console.log('   ✅ Solver + CallBreaker objective created!');
     console.log('   📝 Arbitrum TX:', objectiveTx);
 
   } catch (e) {

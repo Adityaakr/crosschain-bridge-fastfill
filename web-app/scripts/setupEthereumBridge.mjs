@@ -4,8 +4,8 @@ import { privateKeyToAccount } from 'viem/accounts';
 import { sepolia, baseSepolia } from 'viem/chains';
 import { erc20Abi } from './utils/abi.mjs';
 
-// Real STXN CallBreaker ABI
-const realSTXNAbi = [
+// Real Solver + CallBreaker CallBreaker ABI
+const realSolver + CallBreakerAbi = [
   {
     "type": "function",
     "name": "pushUserObjective",
@@ -95,8 +95,8 @@ async function main() {
   // Ethereum Sepolia USDC
   const ETH_USDC = '0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238';
   
-  // Try to find STXN CallBreaker on Ethereum Sepolia
-  // Common addresses where STXN might deploy
+  // Try to find Solver + CallBreaker CallBreaker on Ethereum Sepolia
+  // Common addresses where Solver + CallBreaker might deploy
   const possibleCallBreakers = [
     '0x7f71a9c6b157aa17501cb30b36c3d1affe7059cc', // Same as Arbitrum
     '0x1234567890123456789012345678901234567890', // Alternative
@@ -134,8 +134,8 @@ async function main() {
   console.log(`   Ethereum USDC: ${Number(ethUsdc) / 1e6} USDC ✅`);
   console.log(`   Base Escrow: ${Number(escrowUsdc) / 1e6} USDC`);
 
-  // Step 2: Find STXN CallBreaker on Ethereum
-  console.log('\n🔍 Step 2: Finding STXN CallBreaker on Ethereum...');
+  // Step 2: Find Solver + CallBreaker CallBreaker on Ethereum
+  console.log('\n🔍 Step 2: Finding Solver + CallBreaker CallBreaker on Ethereum...');
   
   let ethCallBreaker = null;
   
@@ -146,7 +146,7 @@ async function main() {
       // Try to call a function to see if it's a CallBreaker
       const balance = await ethPublicClient.readContract({
         address: address,
-        abi: realSTXNAbi,
+        abi: realSolver + CallBreakerAbi,
         functionName: 'senderBalances',
         args: [account.address]
       });
@@ -161,11 +161,11 @@ async function main() {
   }
 
   if (!ethCallBreaker) {
-    console.log('\n❌ STXN CallBreaker not found on Ethereum Sepolia');
+    console.log('\n❌ Solver + CallBreaker CallBreaker not found on Ethereum Sepolia');
     console.log('💡 Options:');
-    console.log('   1. Deploy STXN CallBreaker on Ethereum');
+    console.log('   1. Deploy Solver + CallBreaker CallBreaker on Ethereum');
     console.log('   2. Use existing CallBreaker if available');
-    console.log('   3. Contact STXN team for Ethereum deployment');
+    console.log('   3. Contact Solver + CallBreaker team for Ethereum deployment');
     
     // For now, let's use the Arbitrum one as a placeholder
     ethCallBreaker = process.env.CALLBREAKER_ARB;
@@ -256,8 +256,8 @@ async function main() {
       console.log('   🌐 Verify:', `https://sepolia.etherscan.io/tx/${ethTransferTx}`);
       console.log('   ⛽ Gas used:', ethReceipt.gasUsed.toString());
 
-      // Step 5: Create STXN objective (for completeness)
-      console.log('\n🎯 Step 5: Creating STXN Objective...');
+      // Step 5: Create Solver + CallBreaker objective (for completeness)
+      console.log('\n🎯 Step 5: Creating Solver + CallBreaker Objective...');
       
       const transferCalldata = encodeFunctionData({
         abi: erc20Abi,
@@ -295,7 +295,7 @@ async function main() {
         ]
       };
 
-      console.log('   📤 Creating STXN objective...');
+      console.log('   📤 Creating Solver + CallBreaker objective...');
       console.log('   💡 Note: Using Arbitrum CallBreaker (demo)');
       
       // This would ideally go to Ethereum CallBreaker
@@ -347,7 +347,7 @@ async function main() {
   console.log('   ✅ Actual fund movement');
   
   console.log('\n🚀 SUCCESS: 100% REAL CROSS-CHAIN TRANSFER!');
-  console.log('   Your STXN Fast-Fill Bridge is fully functional!');
+  console.log('   Your Solver + CallBreaker Fast-Fill Bridge is fully functional!');
 }
 
 main().catch(console.error);

@@ -7,7 +7,7 @@ interface IERC20 {
     function balanceOf(address account) external view returns (uint256);
 }
 
-interface ISTXNCallBreaker {
+interface ISolver + CallBreakerCallBreaker {
     struct CallObject {
         uint256 salt;
         uint256 amount;
@@ -73,7 +73,7 @@ contract ImprovedBaseDepositEscrow {
     }
 
     IERC20 public immutable USDC;
-    ISTXNCallBreaker public immutable STXN_CALLBREAKER;
+    ISolver + CallBreakerCallBreaker public immutable Solver + CallBreaker_CALLBREAKER;
     address public immutable OWNER;
     
     mapping(bytes32 => Deposit) public deposits;
@@ -91,9 +91,9 @@ contract ImprovedBaseDepositEscrow {
         _;
     }
 
-    constructor(address usdc, address stxnCallBreaker) {
+    constructor(address usdc, address Solver + CallBreakerCallBreaker) {
         USDC = IERC20(usdc);
-        STXN_CALLBREAKER = ISTXNCallBreaker(stxnCallBreaker);
+        Solver + CallBreaker_CALLBREAKER = ISolver + CallBreakerCallBreaker(Solver + CallBreakerCallBreaker);
         OWNER = msg.sender;
     }
 
@@ -127,8 +127,8 @@ contract ImprovedBaseDepositEscrow {
 
         emit DepositRequested(depositId, user, amount, minReceive, feeCap, targetChainId, targetToken);
         
-        // Push objective to STXN CallBreaker
-        _pushSTXNObjective(depositId, user, minReceive, targetChainId, targetToken);
+        // Push objective to Solver + CallBreaker CallBreaker
+        _pushSolver + CallBreakerObjective(depositId, user, minReceive, targetChainId, targetToken);
     }
 
     /// @notice Solver claims deposit after providing cross-chain service
@@ -174,19 +174,19 @@ contract ImprovedBaseDepositEscrow {
         authorizedSolvers[solver] = false;
     }
 
-    /// @notice Push objective to STXN CallBreaker
-    function _pushSTXNObjective(
+    /// @notice Push objective to Solver + CallBreaker CallBreaker
+    function _pushSolver + CallBreakerObjective(
         bytes32 depositId,
         address user,
         uint256 minReceive,
         uint256 targetChainId,
         address targetToken
     ) internal {
-        // Create STXN objective for cross-chain execution
+        // Create Solver + CallBreaker objective for cross-chain execution
         // This would coordinate with solvers on target chain
         
-        // For now: Log the objective (would be real STXN call in production)
-        // STXN_CALLBREAKER.pushUserObjective(...);
+        // For now: Log the objective (would be real Solver + CallBreaker call in production)
+        // Solver + CallBreaker_CALLBREAKER.pushUserObjective(...);
     }
 
     /// @notice Get contract's USDC balance

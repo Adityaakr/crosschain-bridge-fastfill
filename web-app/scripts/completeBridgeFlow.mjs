@@ -70,7 +70,7 @@ async function main() {
     console.log('   💡 Solution Options:');
     console.log('   1. Get USDC on Arbitrum from faucet/DEX');
     console.log('   2. Use reverse flow (Arbitrum → Base)');
-    console.log('   3. Wait for real STXN solver with liquidity');
+    console.log('   3. Wait for real Solver + CallBreaker solver with liquidity');
     
     console.log('\n🔄 Let\'s demonstrate reverse flow instead...');
     
@@ -143,25 +143,25 @@ async function main() {
   console.log('\n🔄 What Should Happen in Production:');
   console.log('   1️⃣ User deposits 2 USDC on Base ✅ (DONE)');
   console.log('   2️⃣ DepositRequested event emitted ✅ (DONE)');
-  console.log('   3️⃣ STXN objective pushed ✅ (DONE)');
+  console.log('   3️⃣ Solver + CallBreaker objective pushed ✅ (DONE)');
   console.log('   4️⃣ Solver detects objective ⏳ (WAITING)');
   console.log('   5️⃣ Solver sends 1.98 USDC on Arbitrum ⏳ (NEEDS SOLVER)');
   console.log('   6️⃣ Solver claims 2 USDC from Base escrow ⏳ (NEEDS SOLVER)');
   
   console.log('\n💡 Why USDC is Still on Base:');
   console.log('   • Your 2 USDC is in BaseDepositEscrow contract');
-  console.log('   • STXN objective is live and waiting');
+  console.log('   • Solver + CallBreaker objective is live and waiting');
   console.log('   • No solver has executed the Arbitrum transfer yet');
   console.log('   • Need solver with USDC liquidity on Arbitrum');
   
   console.log('\n🚀 Bridge Status:');
   console.log('   ✅ Infrastructure: 100% working');
   console.log('   ✅ User Flow: 100% working');
-  console.log('   ✅ STXN Integration: 100% working');
+  console.log('   ✅ Solver + CallBreaker Integration: 100% working');
   console.log('   ⏳ Solver Execution: Waiting for solver network');
   
   console.log('\n🎯 Next Steps:');
-  console.log('   1. Connect to live STXN solver network');
+  console.log('   1. Connect to live Solver + CallBreaker solver network');
   console.log('   2. Ensure solvers have USDC liquidity on Arbitrum');
   console.log('   3. Solvers will automatically complete transfers');
   

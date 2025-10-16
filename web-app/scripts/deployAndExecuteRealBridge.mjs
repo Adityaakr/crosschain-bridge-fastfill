@@ -60,8 +60,8 @@ const improvedEscrowAbi = [
   }
 ];
 
-// Real STXN CallBreaker ABI
-const realSTXNAbi = [
+// Real Solver + CallBreaker CallBreaker ABI
+const realSolver + CallBreakerAbi = [
   {
     "type": "function",
     "name": "pushUserObjective",
@@ -173,8 +173,8 @@ async function main() {
     return;
   }
 
-  // STEP 3: Create STXN Objective
-  console.log('\n🎯 STEP 3: Create STXN Objective...');
+  // STEP 3: Create Solver + CallBreaker Objective
+  console.log('\n🎯 STEP 3: Create Solver + CallBreaker Objective...');
   
   try {
     // Create transfer calldata for Arbitrum
@@ -212,11 +212,11 @@ async function main() {
       ]
     };
 
-    console.log('   📤 Pushing objective to STXN CallBreaker...');
+    console.log('   📤 Pushing objective to Solver + CallBreaker CallBreaker...');
     
     const objectiveTx = await arbClient.writeContract({
       address: process.env.CALLBREAKER_ARB,
-      abi: realSTXNAbi,
+      abi: realSolver + CallBreakerAbi,
       functionName: 'pushUserObjective',
       args: [userObjective, []],
       value: 0n
@@ -226,12 +226,12 @@ async function main() {
       hash: objectiveTx 
     });
 
-    console.log('   ✅ STXN Objective Created!');
+    console.log('   ✅ Solver + CallBreaker Objective Created!');
     console.log('   📝 Arbitrum TX:', objectiveTx);
     console.log('   🌐 Verify:', `https://sepolia.arbiscan.io/tx/${objectiveTx}`);
 
   } catch (e) {
-    console.log('   ❌ STXN objective failed:', e.message);
+    console.log('   ❌ Solver + CallBreaker objective failed:', e.message);
   }
 
   // STEP 4: Solver Execution on Arbitrum
@@ -314,7 +314,7 @@ async function main() {
   console.log('\n🎉 COMPLETE CROSS-CHAIN BRIDGE EXECUTION 🎉');
   
   console.log('\n📋 What We Achieved:');
-  console.log('   ✅ Real STXN objective creation');
+  console.log('   ✅ Real Solver + CallBreaker objective creation');
   console.log('   ✅ Real cross-chain USDC transfer');
   console.log('   ✅ Different user addresses (user ≠ solver)');
   console.log('   ✅ Real economic incentives');
@@ -328,7 +328,7 @@ async function main() {
   console.log('   5. Connect to live solver network');
 
   console.log('\n🌟 RESULT: 100% REAL CROSS-CHAIN BRIDGE!');
-  console.log('   Your STXN Fast-Fill Bridge is fully functional!');
+  console.log('   Your Solver + CallBreaker Fast-Fill Bridge is fully functional!');
 }
 
 main().catch(console.error);

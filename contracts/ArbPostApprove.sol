@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.24;
 
-import {UserObjective} from "./stxn/Types.sol";
+import {UserObjective} from "./Solver + CallBreaker/Types.sol";
 
 /// @notice Minimal post-approve that enforces (after - before) >= minReceive (6dp).
 contract ArbPostApprove {

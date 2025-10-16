@@ -23,7 +23,7 @@ export const callBreakerAbi = [
   }
 ];
 
-// Real STXN CallBreaker ABI for pushUserObjective
+// Real Solver + CallBreaker CallBreaker ABI for pushUserObjective - CORRECTED FIELD ORDER
 export const ismartExecuteAbi = [
   {
     "type":"function",
@@ -41,6 +41,7 @@ export const ismartExecuteAbi = [
           {"name":"maxFeePerGas","type":"uint256"},
           {"name":"maxPriorityFeePerGas","type":"uint256"},
           {"name":"sender","type":"address"},
+          {"name":"signature","type":"bytes"}, // MOVED BEFORE callObjects!
           {"name":"callObjects","type":"tuple[]","components":[
             {"name":"salt","type":"uint256"},
             {"name":"amount","type":"uint256"},
@@ -51,8 +52,7 @@ export const ismartExecuteAbi = [
             {"name":"skippable","type":"bool"},
             {"name":"verifiable","type":"bool"},
             {"name":"exposeReturn","type":"bool"}
-          ]},
-          {"name":"signature","type":"bytes"}
+          ]}
         ]
       },
       { "name":"_additionalData", "type":"tuple[]", "components":[

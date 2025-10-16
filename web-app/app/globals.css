@@ -1,0 +1,71 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: system-ui, sans-serif;
+  }
+  
+  body {
+    @apply bg-gray-900 text-white;
+  }
+}
+
+@layer components {
+  .chain-card {
+    @apply relative p-6 rounded-xl border-2 border-opacity-30 backdrop-blur-sm;
+  }
+  
+  .arbitrum-card {
+    @apply chain-card bg-arbitrum bg-opacity-20 border-arbitrum;
+  }
+  
+  .base-card {
+    @apply chain-card bg-base bg-opacity-20 border-base;
+  }
+  
+  .component-box {
+    @apply p-4 rounded-lg border border-opacity-50 backdrop-blur-sm;
+  }
+  
+  .user-box {
+    @apply component-box bg-blue-500 bg-opacity-20 border-blue-400;
+  }
+  
+  .solver-box {
+    @apply component-box bg-purple-500 bg-opacity-20 border-purple-400;
+  }
+  
+  .callbreaker-box {
+    @apply component-box bg-orange-500 bg-opacity-20 border-orange-400;
+  }
+  
+  .dex-box {
+    @apply component-box bg-red-500 bg-opacity-20 border-red-400;
+  }
+  
+  .flow-line {
+    @apply absolute border-2 border-dashed border-gray-400 opacity-60;
+  }
+  
+  .flow-arrow {
+    @apply absolute w-0 h-0 border-l-8 border-r-8 border-b-8 border-transparent border-b-gray-400;
+  }
+  
+  .tx-status {
+    @apply px-3 py-1 rounded-full text-sm font-medium;
+  }
+  
+  .tx-pending {
+    @apply tx-status bg-warning bg-opacity-20 text-warning border border-warning border-opacity-30;
+  }
+  
+  .tx-success {
+    @apply tx-status bg-success bg-opacity-20 text-success border border-success border-opacity-30;
+  }
+  
+  .tx-error {
+    @apply tx-status bg-error bg-opacity-20 text-error border border-error border-opacity-30;
+  }
+}

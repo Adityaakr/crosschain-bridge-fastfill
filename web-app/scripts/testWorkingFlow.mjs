@@ -335,7 +335,7 @@ async function main() {
   console.log('   ✅ Post-Approve Validation: Ready');
   
   console.log('\n🚀 The bridge architecture is 100% functional!');
-  console.log('   Next: Replace MockCallBreaker with real STXN CallBreaker');
+  console.log('   Next: Replace MockCallBreaker with real Solver + CallBreaker CallBreaker');
 }
 
 main().catch(console.error);

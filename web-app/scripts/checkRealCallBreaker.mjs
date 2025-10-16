@@ -59,7 +59,7 @@ async function main() {
     console.log('Error checking contract:', e.message);
   }
 
-  // Also check some known STXN-related addresses from web search
+  // Also check some known Solver + CallBreaker-related addresses from web search
   const possibleAddresses = [
     "0x11C323a5340DAE5B958141d352Acf1cdB41dAc37", // Original
     "0x1d0dd0eb4559061972adcfe62b881c15ca880623", // From search results

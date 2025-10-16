@@ -6,7 +6,7 @@ import { erc20Abi } from './utils/abi.mjs';
 
 async function main() {
   console.log('🤖 ACTING AS SOLVER - COMPLETING REAL BRIDGE FLOW 🤖\n');
-  console.log('💡 Simulating what a real STXN solver would do\n');
+  console.log('💡 Simulating what a real Solver + CallBreaker solver would do\n');
 
   const account = privateKeyToAccount(process.env.ARB_RELAYER_PK);
   
@@ -106,15 +106,15 @@ async function main() {
   
   try {
     console.log('   🎯 Solver claiming 10 USDC from BaseDepositEscrow');
-    console.log('   💡 In reality, this would be done through STXN execution');
+    console.log('   💡 In reality, this would be done through Solver + CallBreaker execution');
     
     // For demo, let's show what the escrow withdrawal would look like
-    // Note: In real STXN, this would be done through the CallBreaker execution
-    console.log('   📝 Escrow withdrawal would happen through STXN CallBreaker');
-    console.log('   🔒 Escrow funds remain secure until proper STXN execution');
+    // Note: In real Solver + CallBreaker, this would be done through the CallBreaker execution
+    console.log('   📝 Escrow withdrawal would happen through Solver + CallBreaker CallBreaker');
+    console.log('   🔒 Escrow funds remain secure until proper Solver + CallBreaker execution');
     
     // Check if escrow has a withdraw function (it might not for security)
-    console.log('   💡 BaseDepositEscrow is designed for STXN solver claims only');
+    console.log('   💡 BaseDepositEscrow is designed for Solver + CallBreaker solver claims only');
     
   } catch (e) {
     console.log('   ⚠️ Direct escrow claim not available:', e.message);
@@ -142,24 +142,24 @@ async function main() {
 
   console.log('\n🎯 What We Learned:');
   console.log('   ✅ Bridge infrastructure: 100% functional');
-  console.log('   ✅ STXN integration: 100% working');
+  console.log('   ✅ Solver + CallBreaker integration: 100% working');
   console.log('   ✅ User deposits: Successfully escrowed');
   console.log('   ✅ Objectives: Successfully pushed to CallBreaker');
   console.log('   ❌ Solver execution: No live solvers on testnet');
   
   console.log('\n💡 The Reality:');
   console.log('   • Your 10 USDC is safely escrowed ✅');
-  console.log('   • STXN objective is live and waiting ✅');
+  console.log('   • Solver + CallBreaker objective is live and waiting ✅');
   console.log('   • Bridge architecture is production-ready ✅');
   console.log('   • Need live solver network for completion ⏳');
   
   console.log('\n🚀 Next Steps for Production:');
   console.log('   1. Deploy on mainnet where solvers are active');
   console.log('   2. Ensure solver network has sufficient liquidity');
-  console.log('   3. Connect to live STXN solver marketplace');
+  console.log('   3. Connect to live Solver + CallBreaker solver marketplace');
   
   console.log('\n🌟 CONGRATULATIONS!');
-  console.log('   You\'ve built a fully functional STXN bridge!');
+  console.log('   You\'ve built a fully functional Solver + CallBreaker bridge!');
   console.log('   The infrastructure works - just needs the ecosystem!');
 }
 

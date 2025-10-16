@@ -4,7 +4,7 @@ import { privateKeyToAccount } from 'viem/accounts';
 import { arbitrumSepolia } from 'viem/chains';
 
 async function main() {
-  console.log('🚀 DEPLOYING FRESH STXN CALLBREAKER - NO MOCKS 🚀\n');
+  console.log('🚀 DEPLOYING FRESH Solver + CallBreaker CALLBREAKER - NO MOCKS 🚀\n');
 
   const account = privateKeyToAccount(process.env.ARB_RELAYER_PK);
   
@@ -34,7 +34,7 @@ async function main() {
     // forge create --rpc-url $ARB_RPC_URL --private-key $ARB_RELAYER_PK src/CallBreaker.sol:CallBreaker --constructor-args <owner_address>
     
     console.log('\n🔧 Run this command to deploy fresh CallBreaker:');
-    console.log(`cd lib/stxn && forge create --rpc-url ${process.env.ARB_RPC_URL} --private-key ${process.env.ARB_RELAYER_PK} src/CallBreaker.sol:CallBreaker --constructor-args ${account.address}`);
+    console.log(`cd lib/Solver + CallBreaker && forge create --rpc-url ${process.env.ARB_RPC_URL} --private-key ${process.env.ARB_RELAYER_PK} src/CallBreaker.sol:CallBreaker --constructor-args ${account.address}`);
     
     console.log('\n💡 Alternative: Let\'s try to understand the current CallBreaker issue first...');
     
