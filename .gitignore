@@ -54,14 +54,14 @@ coverage/
 *.tmp
 *.temp
 
-# Scripts (contains private keys and deployment logic)
+# Scripts with sensitive data (contains private keys and deployment logic)
 scripts/
+web-app/scripts/
 *.mjs
 
-# Deployment and testing files
+# Deployment and testing files with sensitive data
 DEPLOYMENT_STATUS.md
 FINAL_STATUS.md
 authorize-*.mjs
 deploy-*.mjs
 test-*.mjs
-.next
