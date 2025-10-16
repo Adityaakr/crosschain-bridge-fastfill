@@ -13,6 +13,12 @@ cache/
 artifacts/
 typechain/
 typechain-types/
+dist/
+build/
+
+# Next.js
+.next/
+next-env.d.ts
 
 # IDE files
 .vscode/
@@ -48,6 +54,14 @@ coverage/
 *.tmp
 *.temp
 
-# Scripts
+# Scripts (contains private keys and deployment logic)
 scripts/
 *.mjs
+
+# Deployment and testing files
+DEPLOYMENT_STATUS.md
+FINAL_STATUS.md
+authorize-*.mjs
+deploy-*.mjs
+test-*.mjs
+.next
