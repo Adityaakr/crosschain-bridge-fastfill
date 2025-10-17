@@ -4,6 +4,7 @@ A professional cross-chain USDC bridge with instant liquidity (<10s) using the S
 
 <img width="950" height="610" alt="Screenshot 2025-10-17 at 11 16 46 AM" src="https://github.com/user-attachments/assets/e9f28c6d-d8cd-4474-8bf4-999c3514a662" />
 
+<img width="859" height="648" alt="Screenshot 2025-10-17 at 11 20 47 AM" src="https://github.com/user-attachments/assets/4aac463d-4637-4da2-ae05-6ff9f9f44543" />
 
 ## **Features**
 
