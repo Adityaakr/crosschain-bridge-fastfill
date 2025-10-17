@@ -2,6 +2,9 @@
 
 A professional cross-chain USDC bridge with instant liquidity using the Solver + CallBreaker for Base ↔ Arbitrum transfers.
 
+<img width="2536" height="1872" alt="image" src="https://github.com/user-attachments/assets/746daa1a-bbb4-49ed-9e77-c6441cb7aa37" />
+
+
 ## **Features**
 
 - **Modern Web Interface**: Beautiful React/Next.js interface with real-time transaction visualization
