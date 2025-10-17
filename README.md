@@ -4,20 +4,20 @@ A professional cross-chain USDC bridge with instant liquidity using the Solver +
 
 ## **Features**
 
-- **Professional Web Interface**: Modern React/Next.js interface with real-time transaction visualization
-- **Cross-Chain Bridge**: Arbitrum → Base USDC transfers with instant liquidity
-- **Solver + CallBreaker Protocol**: 3-step flow with burner address security
+- **Modern Web Interface**: Beautiful React/Next.js interface with real-time transaction visualization
+- **Real Cross-Chain Bridge**: Base → Arbitrum USDC transfers with instant liquidity
+- **3-Step Bridge Flow**: Escrow deposit, instant liquidity, and solver claim
 - **Live Transaction Tracking**: Real-time balance updates and transaction monitoring
-- **Professional Design**: Corporate-grade UI with landscape layout and prominent balances
-- **Multi-Wallet Support**: Separate user and solver wallet architecture
+- **Professional Design**: Modern UI with vibrant colors and smooth animations
+- **Multi-Wallet Architecture**: Separate solver and user wallet system
 
 ## 🏗️ **Architecture**
 
 ### Bridge Flow
-1. **Step 1 - User Deposit**: User deposits USDC to burner address on Arbitrum Sepolia
-2. **Step 2 - Instant Liquidity**: Solver provides 99% USDC to receiver on Base Sepolia  
-3. **Step 3 - Solver Claim**: Solver claims deposited USDC from burner address
-4. **Professional UI**: Real-time visualization with transaction hashes and explorer links
+1. **Step 1 - Escrow Deposit**: Base Solver locks USDC in escrow contract
+2. **Step 2 - Instant Liquidity**: Solver provides 100% USDC cross-chain to Arbitrum
+3. **Step 3 - Solver Claim**: Solver claims USDC from Base escrow
+4. **Live Visualization**: Real-time flow diagram with transaction hashes and explorer links
 
 ### Project Structure
 ```
@@ -29,8 +29,9 @@ web-app/
       BridgeArchitecture.tsx    # Architecture diagram
       FlowDiagram.tsx          # 3-step flow visualization
     lib/
-      flowBridge.ts            # Core bridge logic
-      escrowBridge.ts          # Alternative bridge implementation
+      realSTXNBridge.ts        # Main cross-chain bridge implementation
+      reliableSTXNBridge.ts    # Alternative reliable bridge
+      workingAutomaticSTXNBridge.ts # Automatic bridge variant
   
 contracts/
   BaseDepositEscrow.sol         # Base network escrow contracts

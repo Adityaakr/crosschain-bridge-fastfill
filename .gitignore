@@ -62,10 +62,27 @@ coverage/
 
 # Scripts with sensitive data (contains private keys and deployment logic)
 scripts/
+*.mjs
+check-and-fund-accounts.mjs
+execute-real-bridge-now.mjs
+test-*.mjs
+real-*.mjs
+complete-*.mjs
+fixed-*.mjs
+simple-*.mjs
+true-*.mjs
+escrow-*.mjs
+final-*.mjs
+advanced-*.mjs
+debug-*.mjs
+monitor-*.mjs
 
 # Deployment and testing files with sensitive data
 DEPLOYMENT_STATUS.md
 FINAL_STATUS.md
+
+# Solver SDK (contains sensitive deployment data)
+solver-sdk/
 
 # Hardhat files
 cache/

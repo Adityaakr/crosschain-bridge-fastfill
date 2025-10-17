@@ -1,16 +1,21 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { ArrowRight, User, Shield, Flame, CheckCircle, Clock } from 'lucide-react'
-import { FlowBridgeTransaction } from '../../lib/flowBridge'
+import { ArrowRight, User, Shield, Flame, CheckCircle, Clock, Zap } from 'lucide-react'
+import { RealSTXNTransaction } from '../../lib/realSTXNBridge'
 
 interface FlowDiagramProps {
-  transactions: FlowBridgeTransaction[]
+  transactions: RealSTXNTransaction[]
   isExecuting: boolean
   currentStep: string
 }
 
 export default function FlowDiagram({ transactions, isExecuting, currentStep }: FlowDiagramProps) {
+  const chainColors = {
+    base: 'from-blue-500 to-blue-600',
+    arbitrum: 'from-orange-500 to-red-500'
+  }
+
   const getStepStatus = (stepNumber: number) => {
     const stepTransaction = transactions.find(tx => tx.step === stepNumber)
     if (stepTransaction) return 'completed'
@@ -23,36 +28,44 @@ export default function FlowDiagram({ transactions, isExecuting, currentStep }: 
     subtitle, 
     icon: Icon, 
     status, 
-    chain, 
+    chain,
     transaction 
-  }: { 
+  }: {
     title: string
     subtitle: string
     icon: any
     status: 'pending' | 'executing' | 'completed'
-    chain: 'base' | 'arbitrum' | 'burner'
-    transaction?: FlowBridgeTransaction
+    chain: 'base' | 'arbitrum'
+    transaction?: RealSTXNTransaction
   }) => {
-    const chainColors = {
-      base: 'from-blue-500 to-blue-600',
-      arbitrum: 'from-indigo-500 to-indigo-600',
-      burner: 'from-red-500 to-red-600'
+    const getStatusColor = () => {
+      switch (status) {
+        case 'completed': return 'bg-emerald-50 border-emerald-300 text-emerald-900 shadow-emerald-100'
+        case 'executing': return 'bg-amber-50 border-amber-300 text-amber-900 shadow-amber-100 animate-pulse'
+        default: return 'bg-slate-50 border-slate-300 text-slate-700'
+      }
     }
 
-    const statusColors = {
-      pending: 'border-gray-300 bg-gray-50',
-      executing: 'border-blue-400 bg-blue-50',
-      completed: 'border-green-400 bg-green-50'
+    const getIconColor = () => {
+      switch (status) {
+        case 'completed': return 'text-emerald-600 bg-emerald-100'
+        case 'executing': return 'text-amber-600 bg-amber-100'
+        default: return 'text-slate-500 bg-slate-100'
+      }
+    }
+
+    const getChainColor = () => {
+      return chain === 'base' ? 'bg-blue-500 text-white font-medium' : 'bg-orange-500 text-white font-medium'
     }
 
     return (
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
-        className={`relative p-4 rounded-xl border-2 ${statusColors[status]} backdrop-blur-sm`}
+        className={`relative p-4 rounded-xl border-2 ${getStatusColor()} backdrop-blur-sm`}
         whileHover={{ scale: 1.02 }}
       >
-        <div className={`absolute inset-0 rounded-xl bg-gradient-to-br ${chainColors[chain]} opacity-10`} />
+        <div className={`absolute inset-0 rounded-xl bg-gradient-to-br ${getChainColor()} opacity-10`} />
         
         <div className="relative z-10">
           <div className="flex items-center gap-3 mb-3">
@@ -94,11 +107,20 @@ export default function FlowDiagram({ transactions, isExecuting, currentStep }: 
   }
 
   const FlowArrow = ({ active }: { active: boolean }) => (
-    <motion.div
-      className="flex items-center justify-center"
-      animate={{ opacity: active ? 1 : 0.3 }}
+    <motion.div 
+      className="flex justify-center items-center"
+      animate={{ scale: active ? 1.1 : 1 }}
     >
-      <ArrowRight className={`w-8 h-8 ${active ? 'text-blue-600' : 'text-gray-400'}`} />
+      <div className={`flex items-center gap-2 px-6 py-3 rounded-full border-2 shadow-lg ${
+        active 
+          ? 'bg-gradient-to-r from-blue-500 to-purple-600 border-blue-400 text-white' 
+          : 'bg-white border-slate-300 text-slate-500'
+      }`}>
+        <ArrowRight className={`w-6 h-6 ${active ? 'animate-pulse' : ''}`} />
+        <span className="text-sm font-bold">
+          {active ? 'EXECUTING' : 'PENDING'}
+        </span>
+      </div>
     </motion.div>
   )
 
@@ -106,39 +128,41 @@ export default function FlowDiagram({ transactions, isExecuting, currentStep }: 
     <div className="w-full max-w-7xl mx-auto p-8 bg-white rounded-3xl shadow-2xl border border-blue-100">
       {/* Header */}
       <div className="text-center mb-8">
-        <h2 className="text-3xl font-bold text-gray-900 mb-2">Live Transaction Flow</h2>
-        <p className="text-lg text-blue-600 font-medium">Base → Arbitrum via Burner Address</p>
+        <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
+          Cross-Chain Bridge Flow
+        </h2>
+        <p className="text-lg text-slate-600 font-medium">Real-time USDC transfer: Base → Arbitrum</p>
       </div>
 
       {/* Chain Labels */}
       <div className="grid grid-cols-3 gap-4 mb-8">
         <div className="text-center">
-          <div className="inline-flex items-center gap-3 px-6 py-3 bg-blue-50 rounded-full border-2 border-blue-200">
-            <div className="w-4 h-4 bg-blue-600 rounded-full"></div>
-            <span className="text-blue-800 font-bold text-lg">BASE SEPOLIA</span>
+          <div className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full shadow-lg">
+            <div className="w-5 h-5 bg-white rounded-full animate-pulse"></div>
+            <span className="text-white font-bold text-xl">BASE SEPOLIA</span>
           </div>
         </div>
         <div className="text-center">
-          <div className="inline-flex items-center gap-3 px-6 py-3 bg-red-50 rounded-full border-2 border-red-200">
-            <Flame className="w-5 h-5 text-red-600" />
-            <span className="text-red-800 font-bold text-lg">BURNER</span>
+          <div className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full shadow-lg">
+            <ArrowRight className="w-7 h-7 text-white animate-bounce" />
+            <span className="text-white font-bold text-xl">BRIDGE</span>
           </div>
         </div>
         <div className="text-center">
-          <div className="inline-flex items-center gap-3 px-6 py-3 bg-indigo-50 rounded-full border-2 border-indigo-200">
-            <div className="w-4 h-4 bg-indigo-600 rounded-full"></div>
-            <span className="text-indigo-800 font-bold text-lg">ARBITRUM SEPOLIA</span>
+          <div className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-orange-500 to-red-500 rounded-full shadow-lg">
+            <div className="w-5 h-5 bg-white rounded-full animate-pulse"></div>
+            <span className="text-white font-bold text-xl">ARBITRUM SEPOLIA</span>
           </div>
         </div>
       </div>
 
       {/* Flow Steps */}
       <div className="grid grid-cols-1 md:grid-cols-7 gap-4 items-center">
-        {/* Step 1: User Deposit */}
-        <div className="md:col-span-2">
+        {/* Step 1: Escrow Deposit on Base */}
+        <div className="md:col-span-3">
           <StepBox
-            title="Step 1: User Deposit"
-            subtitle="Deposit USDC to burner"
+            title="Step 1: Escrow Deposit"
+            subtitle="Base Solver locks USDC in escrow"
             icon={User}
             status={getStepStatus(1)}
             chain="base"
@@ -148,12 +172,12 @@ export default function FlowDiagram({ transactions, isExecuting, currentStep }: 
 
         <FlowArrow active={getStepStatus(1) === 'completed'} />
 
-        {/* Step 2: Solver Liquidity */}
-        <div className="md:col-span-2">
+        {/* Step 2: Cross-Chain Liquidity on Arbitrum */}
+        <div className="md:col-span-3">
           <StepBox
             title="Step 2: Instant Liquidity"
-            subtitle="Solver provides 99% USDC"
-            icon={Shield}
+            subtitle="Solver provides 99% USDC cross-chain"
+            icon={Zap}
             status={getStepStatus(2)}
             chain="arbitrum"
             transaction={transactions.find(tx => tx.step === 2)}
@@ -162,14 +186,14 @@ export default function FlowDiagram({ transactions, isExecuting, currentStep }: 
 
         <FlowArrow active={getStepStatus(2) === 'completed'} />
 
-        {/* Step 3: Solver Claim */}
-        <div className="md:col-span-2">
+        {/* Step 3: Solver Claims from Escrow */}
+        <div className="md:col-span-3">
           <StepBox
             title="Step 3: Solver Claim"
-            subtitle="Claim from burner address"
-            icon={Flame}
+            subtitle="Claim USDC from Base escrow"
+            icon={Shield}
             status={getStepStatus(3)}
-            chain="burner"
+            chain="base"
             transaction={transactions.find(tx => tx.step === 3)}
           />
         </div>

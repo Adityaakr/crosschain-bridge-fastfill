@@ -3,22 +3,23 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowDown, Wallet, Settings, Info, ExternalLink, Zap, CheckCircle, AlertCircle, Shield, Flame } from 'lucide-react'
-import { FlowCrossChainBridge, FlowBridgeTransaction } from '../../lib/flowBridge'
+import { RealSTXNCallBreakerBridge, RealSTXNTransaction } from '../../lib/realSTXNBridge'
 import FlowDiagram from './FlowDiagram'
+import EnhancedNetworkFlow from './EnhancedNetworkFlow'
 
 export default function BridgeInterface() {
   const [amount, setAmount] = useState('')
   const [isConnected, setIsConnected] = useState(true) // Auto-connect for demo
   const [isLoading, setIsLoading] = useState(false)
-  const [fromChain, setFromChain] = useState<'arbitrum' | 'base'>('arbitrum')
-  const [toChain, setToChain] = useState<'arbitrum' | 'base'>('base')
+  const [fromChain, setFromChain] = useState<'arbitrum' | 'base'>('base')
+  const [toChain, setToChain] = useState<'arbitrum' | 'base'>('arbitrum')
   const [balances, setBalances] = useState({
     arbitrum: '0.000000',
     base: '0.000000',
     receiver: '0.000000'
   })
-  const [recentTransactions, setRecentTransactions] = useState<FlowBridgeTransaction[]>([])
-  const [bridge] = useState(() => new FlowCrossChainBridge())
+  const [transactions, setTransactions] = useState<RealSTXNTransaction[]>([])
+  const [bridge] = useState(new RealSTXNCallBreakerBridge())
   const [bridgeStatus, setBridgeStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const [statusMessage, setStatusMessage] = useState('')
   const [currentExecutionStep, setCurrentExecutionStep] = useState('')
@@ -60,26 +61,26 @@ export default function BridgeInterface() {
     try {
       const amountNum = parseFloat(amount)
       
-      const transactions = await bridge.executeFlowBridge(amountNum, (step: string, transaction?: FlowBridgeTransaction) => {
+      const transactions = await bridge.executeRealSTXNBridge(amountNum, (step: string, transaction?: RealSTXNTransaction) => {
         setCurrentExecutionStep(step)
         setStatusMessage(step)
         
         if (transaction) {
-          setRecentTransactions(prev => [transaction, ...prev].slice(0, 10))
+          setTransactions(prev => [transaction, ...prev].slice(0, 10))
         }
       })
       
       // Update balances
       const newBalances = await bridge.getBalances()
       setBalances({
-        arbitrum: newBalances.userArbitrum,   // User balance on Arbitrum (DEPOSITS from here)
-        base: newBalances.userBase,           // User balance on Base (RECEIVES here)
-        receiver: newBalances.userBase        // User balance on Base (RECEIVES here)
+        arbitrum: newBalances.userArbitrum,   // User balance on Arbitrum (receives here)
+        base: newBalances.userBase,           // User balance on Base (deposits from here)
+        receiver: newBalances.userArbitrum    // User balance on Arbitrum (receives here)
       })
       
       setCurrentExecutionStep('Cross-chain bridge complete')
       setBridgeStatus('success')
-      setStatusMessage(`Successfully executed real cross-chain bridge: ${amount} USDC from Arbitrum to Base!`)
+      setStatusMessage(`Successfully executed real bridge Transaction: ${amount} USDC from Base to Arbitrum!`)
       setAmount('')
       
     } catch (error: any) {
@@ -108,7 +109,7 @@ export default function BridgeInterface() {
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">Flow Cross-Chain Bridge</h1>
-            <p className="text-lg text-blue-600 font-medium">Arbitrum → Base</p>
+            <p className="text-lg text-blue-600 font-medium">Base → Arbitrum</p>
           </div>
           <div className="flex items-center gap-3 bg-blue-50 px-4 py-2 rounded-full">
             <Flame className="w-5 h-5 text-blue-600" />
@@ -217,7 +218,7 @@ export default function BridgeInterface() {
                   Executing Bridge...
                 </div>
               ) : (
-                'Execute Flow Bridge'
+                'Execute Transaction'
               )}
             </button>
           </div>
@@ -233,12 +234,12 @@ export default function BridgeInterface() {
                   <span className="font-semibold text-gray-900">{amount || '0'} USDC</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Bridge Fee (1%)</span>
-                  <span className="font-semibold text-gray-900">{amount ? (parseFloat(amount) * 0.01).toFixed(6) : '0'} USDC</span>
+                  <span className="text-gray-600">Bridge Fee (0.005%)</span>
+                  <span className="font-semibold text-green-600">{amount ? (parseFloat(amount) * 0.00005).toFixed(6) : '0'} USDC (Covered by Solver)</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">You Receive</span>
-                  <span className="font-semibold text-gray-900">{minReceive} USDC</span>
+                  <span className="font-semibold text-gray-900">{amount || '0'} USDC</span>
                 </div>
                 <div className="border-t border-gray-300 pt-3">
                   <div className="flex justify-between">
@@ -272,14 +273,19 @@ export default function BridgeInterface() {
       </motion.div>
 
       {/* Live Transaction Visualizer */}
-      {(isLoading || recentTransactions.length > 0) && (
+      {(isLoading || transactions.length > 0) && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="mb-8"
         >
-          <FlowDiagram
-            transactions={recentTransactions}
+          <EnhancedNetworkFlow 
+            transactions={transactions}
+            isExecuting={isLoading}
+            currentStep={currentExecutionStep}
+          />
+          <FlowDiagram 
+            transactions={transactions}
             isExecuting={isLoading}
             currentStep={currentExecutionStep}
           />
@@ -336,8 +342,8 @@ export default function BridgeInterface() {
         <h3 className="text-2xl font-bold text-gray-900 mb-6">Recent Bridge Transactions</h3>
         
         <div className="space-y-4">
-          {recentTransactions.length > 0 ? (
-            recentTransactions.map((tx, index) => (
+          {transactions.length > 0 ? (
+            transactions.map((tx, index) => (
               <div key={index} className="flex items-center justify-between p-6 bg-gradient-to-r from-blue-50 to-gray-50 rounded-2xl border border-gray-200">
                 <div className="flex items-center gap-4">
                   <div className={`w-4 h-4 rounded-full ${
@@ -347,8 +353,9 @@ export default function BridgeInterface() {
                   <div className="flex flex-col">
                     <span className="text-xl font-bold text-gray-900">{tx.amount} USDC</span>
                     <span className="text-gray-600 text-sm">
-                      {tx.type === 'user_deposit' ? 'User Deposit' : 
-                       tx.type === 'solver_liquidity' ? 'Solver Liquidity' : 'Solver Claim'}
+                      {tx.type === 'escrow_deposit' ? 'Escrow Deposit' : 
+                       tx.type === 'cross_chain_liquidity' ? 'Cross-Chain Liquidity' : 
+                       tx.type === 'solver_claim' ? 'Solver Claim' : 'Unknown'}
                     </span>
                   </div>
                   <span className="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
