@@ -1,6 +1,6 @@
-# Solver + CallBreaker Cross-Chain Bridge
+# Cross-Chain Bridge FastFill
 
-A professional cross-chain USDC bridge with instant liquidity using the Solver + CallBreaker protocol for Arbitrum ↔ Base transfers.
+A professional cross-chain USDC bridge with instant liquidity using the Solver + CallBreaker for Base ↔ Arbitrum transfers.
 
 ## **Features**
 
@@ -50,8 +50,8 @@ contracts/
 ### Installation
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/solver-callbreaker-bridge.git
-cd solver-callbreaker-bridge
+git clone https://github.com/Adityaakr/crosschain-bridge-fastfill.git
+cd crosschain-bridge-fastfill
 
 # Install web app dependencies
 cd web-app
@@ -78,8 +78,8 @@ npm run dev
 1. **Navigate to Bridge Interface**: Open http://localhost:3000 and go to the "Bridge Interface" tab
 
 2. **Connect Wallets**: The interface shows real balances for:
-   - FROM wallet (0x5A265...): Arbitrum balance for deposits
-   - TO wallet (0x3a159...): Base balance for receiving funds
+   - FROM wallet  Arbitrum balance for deposits
+   - TO walletBase balance for receiving funds
 
 3. **Execute Bridge Transfer**:
    - Enter amount (e.g., 0.1 USDC)
