@@ -1,6 +1,6 @@
 # Cross-Chain Bridge FastFill
 
-A professional cross-chain USDC bridge with instant liquidity (<10s) using the Solver + CallBreaker for Base ↔ Arbitrum transfers.
+Solver-powered USDC bridge: <10s fast-fills, capital-efficient settlement via CallBreaker. Base ↔ Arbitrum & EVM-compatible.
 
 <img width="950" height="610" alt="Screenshot 2025-10-17 at 11 16 46 AM" src="https://github.com/user-attachments/assets/e9f28c6d-d8cd-4474-8bf4-999c3514a662" />
 
