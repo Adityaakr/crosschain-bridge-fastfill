@@ -2,8 +2,7 @@
 
 A professional cross-chain USDC bridge with instant liquidity using the Solver + CallBreaker for Base ↔ Arbitrum transfers.
 
-<img width="2536" height="1872" alt="image" src="https://github.com/user-attachments/assets/746daa1a-bbb4-49ed-9e77-c6441cb7aa37" />
-
+<img width="830" height="553" alt="Screenshot 2025-10-17 at 11 14 40 AM" src="https://github.com/user-attachments/assets/5b5e45b2-ddd4-48e5-b617-40139db4328b" />
 
 ## **Features**
 
