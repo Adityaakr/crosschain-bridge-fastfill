@@ -1,6 +1,6 @@
 # Solver + CallBreaker Cross-Chain Bridge
 
-A professional cross-chain USDC bridge with instant liquidity using the Solver + CallBreaker protocol for Arbitrum ↔ Base transfers.
+A professional cross-chain USDC bridge with instant liquidity using the Solver + CallBreaker for Base ↔ Arbitrum transfers.
 
 ## **Features**
 
